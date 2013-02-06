@@ -116,7 +116,7 @@ class Instruction(Handler):
 
 class Codered(Handler):              
       def get(self):
-          self.render('codered.html')
+          self.render('start.html')
       
       def post(self):
           self.redirect('/codered') 

@@ -65,9 +65,6 @@ body{
 	color: rgb(255,127,39);
 	border-radius: 5px;
 }
-.error{
-    color: red;
-}
 .footer {
     background-color: white;
     height: 40px;
