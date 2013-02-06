@@ -1,6 +1,8 @@
 coderedsolution13
 =================
 
-Questions Entry Directory : /admin/questions
+##Information
 
-Users registration dir : /admin/register
+1. Questions Entry Directory : /admin/questions
+
+2. Users registration dir : /admin/register
