@@ -2,4 +2,5 @@ coderedsolution13
 =================
 
 Questions Entry Directory : /admin/questions
-users registration dir : /admin/register
+
+Users registration dir : /admin/register
