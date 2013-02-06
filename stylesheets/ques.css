@@ -40,8 +40,8 @@ body{
 	margin-top: 0;
 }
 .login-form{
-	margin-left: 25%;
-	margin-right: 30%;
+	margin-left: 2%; 
+	margin-right: 2%;
 }
 .login-form input{
 	margin-left: 15px;
@@ -54,10 +54,27 @@ body{
 	border-color: rgb(88,88,88);
 }
 .login-form p{
-	text-align: right;
+	text-align: left;
 }
-.innerform{
-	display: inline;
+textarea{
+	height: 200px;
+	width: 400px;
+	max-width: 430px;
+	max-height: 250px;
+}
+#main{
+	height: 100%;
+	width: 100%;
+	display: inline-block;
+	text-align: left;
+}
+#one{
+	float: left;
+	width: 60%;
+}
+#two{
+	float: right;
+	width: 40%;
 }
 .submit{
 	width: auto;
