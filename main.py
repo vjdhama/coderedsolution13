@@ -14,9 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import webapp2,os
+import webapp2, os, string, random 
 import jinja2
-
+from google.appengine.ext import db
 
 jinja_environment = jinja2.Environment(autoescape=True,
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
@@ -32,13 +32,32 @@ class Handler(webapp2.RequestHandler):
     def render(self, template, **kw):
         self.write(self.render_str(template, **kw))
 
+class Register(db.Model):
+    teamname = db.StringProperty(required = False)
+    password = db.StringProperty(required = True)
+    email = db.StringProperty(required = True)
+
 class MainHandler(Handler):
     def get(self):
-        #template = jinja_environment.get_template('base.html')
-        #self.response.out.write(template.render())
         self.render("base.html")
-        #self.response.out.write('dawddwad')
+    def post(self):
+        self.render("base.html")
+
+class RegisterHandler(Handler):
+    def make_pass(self):
+        return ''.join(random.choice(string.letters) for x in xrange(5))
+    def get(self):
+        self.render('reg.html')
+    def post(self):
+        team = self.request.get('team')
+        mail = self.request.get('email')
+        pasw = self.make_pass()
+        Regstr = Register(teamname = team,password = pasw,email = mail)
+        Regstr.put()
+        self.redirect('/')
+
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/admin/register', RegisterHandler)
 ], debug=True)
