@@ -32,16 +32,16 @@ class Handler(webapp2.RequestHandler):
     def render(self, template, **kw):
         self.write(self.render_str(template, **kw))
 
-class Register(db.Model):
-    teamname = db.StringProperty(required = False)
-    password = db.StringProperty(required = True)
-    email = db.StringProperty(required = True)
-
 class MainHandler(Handler):
     def get(self):
         self.render("base.html")
     def post(self):
         self.render("base.html")
+
+class Register(db.Model):
+    teamname = db.StringProperty(required = False)
+    password = db.StringProperty(required = True)
+    email = db.StringProperty(required = True)
 
 class RegisterHandler(Handler):
     def make_pass(self):
@@ -56,8 +56,30 @@ class RegisterHandler(Handler):
         Regstr.put()
         self.redirect('/')
 
+class Question(db.Model):
+    question = db.TextProperty(required = True)
+    choice_1 = db.TextProperty(required = True)
+    choice_2 = db.TextProperty(required = True)
+    choice_3 = db.TextProperty(required = True)
+    choice_4 = db.TextProperty(required = True)
+
+
+class QuesHandler(Handler):
+    def get(self):
+        self.render('ques.html')
+    def post(self):
+        ques = self.request.get('ques')
+        ch1 = self.request.get('ch1')
+        ch2 = self.request.get('ch2')
+        ch3 = self.request.get('ch3')
+        ch4 = self.request.get('ch4')
+
+        Q = Question(question = ques,choice_1 =ch1,choice_2 = ch2,choice_3 = ch3,choice_4 = ch4)
+        Q.put()
+        self.redirect('/admin/question')
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/admin/register', RegisterHandler)
+    ('/admin/register', RegisterHandler),
+    ('/admin/question', QuesHandler)
 ], debug=True)
