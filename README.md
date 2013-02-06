@@ -5,4 +5,4 @@ coderedsolution13
 
 1. Questions Entry Directory : /admin/questions
 
-2. Users registration dir : /admin/register
+2. Users registration Directory : /admin/register
