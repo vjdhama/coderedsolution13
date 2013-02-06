@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  	<link type="text/css" rel="stylesheet" href="../stylesheets/start.css" />
+	<title>CodeRed</title>
+</head>
+<body>
+	<script type="text/javascript">
+		$('body').bind('mousewheel', function (e) { // on scroll
+    		var $div = $('div');
+
+    		// set div scroll top offset to current + extra from this scroll
+    		$div.scrollTop($div.scrollTop() - e.originalEvent.wheelDelta);
+
+	    	return false; // prevent body scrolling	
+		});
+	</script>
+	<div class = 'header'>
+		<div><a href = '#'><span style = 'color : rgb(88,88,88);'>Code</span>Red</a></div>
+	</div>
+	<div class = "login-box">
+		<h3>CodeRed Questions</h3>
+		<hr>
+		<form method = 'post' class = 'login-form'>
+		<div id = 'main'>
+			<div id = 'one'>
+				<p>Question 
+					<pre>{{question}}</pre>
+				</p>
+			</div>&nbsp;
+			<vr>
+			<div id = 'two'>
+				<p> 
+					<input name = 'ch' type = 'radio'>
+				</p>
+				<p>
+					<input name = 'ch' type = 'radio'>
+				</p>
+				<p> 
+					<input name = 'ch' type = 'radio'>
+				</p>
+				<p> 
+					<input name = 'ch' type = 'radio'>
+				</p>
+				<p>
+					<input class = 'submit' type = 'submit'>
+				</p>
+			</div>&nbsp;
+		</div>
+		</form>
+	</div>
+</body>
+<footer class = 'footer'>
+	<img src="https://developers.google.com/appengine/images/appengine-noborder-120x30.gif" 
+	alt="Powered by Google App Engine" />
+</footer>
+</html>
