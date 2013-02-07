@@ -21,28 +21,57 @@ from google.appengine.ext import db
 jinja_environment = jinja2.Environment(autoescape=True,
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
 
-class Handler(webapp2.RequestHandler):
-    def write(self, *a, **kw):
-        self.response.out.write(*a, **kw)
-        
-    def render_str(self, template, **params):
-        t = jinja_environment.get_template(template)
-        return t.render(params)
+def users_key(group = 'default'):
+      return db.Key.from_path('users', group)
 
-    def render(self, template, **kw):
-        self.write(self.render_str(template, **kw))
+class Handler(webapp2.RequestHandler):
+      def write(self, *a, **kw):
+          self.response.out.write(*a, **kw)
+        
+      def render_str(self, template, **params):
+          t = jinja_environment.get_template(template)
+          return t.render(params)
+
+      def render(self, template, **kw):
+          self.write(self.render_str(template, **kw))
+
+        
 
 class MainHandler(Handler):
     def get(self):
-        self.render("base.html")
-    def post(self):
-        self.render("base.html")
+          self.render('base.html')
+          
+    def post(self):           
+          teamname = self.request.get('teamname')
+          password = self.request.get('password')
+          u = Register.login(teamname, password)
+          
+          if u:
+              self.redirect('/instructions')
+          else:
+              msg = 'Invalid login'
+              self.render('base.html', error = msg) 
 
 class Register(db.Model):
-    teamname = db.StringProperty(required = False)
-    password = db.StringProperty(required = True)
-    email = db.StringProperty(required = True)
-
+     teamname = db.StringProperty(required = False)
+     password = db.StringProperty(required = True)
+     email = db.StringProperty(required = True)
+    
+     @classmethod
+     def by_name(cls, teamname):
+         u = Register.all().filter('teamname =', teamname).get()
+         return u
+         
+                         
+     @classmethod
+     def login(cls, teamname, pw):
+         u = cls.by_name(teamname)
+         if u and valid_pw(pw, u.password):
+              return u       
+   
+def valid_pw(pw, pwc):
+    return pw == pwc    
+   
 class RegisterHandler(Handler):
     def make_pass(self):
         return ''.join(random.choice(string.letters) for x in xrange(5))
@@ -78,10 +107,26 @@ class QuesHandler(Handler):
         Q.put()
         self.redirect('/admin/question')
 
+class Instruction(Handler):
+      def get(self):
+          self.render('instruction.html')
+      
+      def post(self):
+          self.redirect('/codered')    
+
+class Codered(Handler):              
+      def get(self):
+          self.render('codered.html')
+      
+      def post(self):
+          self.redirect('/codered') 
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/admin/register', RegisterHandler),
-    ('/admin/question', QuesHandler)
+    ('/admin/question', QuesHandler),
+    ('/instructions', Instruction),
+    ('/codered', Codered),
     #,
     #('/start', StartHandler)
 ], debug=True)
