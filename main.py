@@ -11,7 +11,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License for the specific language governing perm issions and
 # limitations under the License.
 #
 import webapp2, os, string, random 
@@ -23,6 +23,7 @@ jinja_environment = jinja2.Environment(autoescape=True,
 
 def users_key(group = 'default'):
       return db.Key.from_path('users', group)
+
 
 class Handler(webapp2.RequestHandler):
       def write(self, *a, **kw):
@@ -110,14 +111,12 @@ class QuesHandler(Handler):
 class Instruction(Handler):
       def get(self):
           self.render('instruction.html')
-      
       def post(self):
           self.redirect('/codered')    
 
 class Codered(Handler):              
       def get(self):
           self.render('start.html')
-      
       def post(self):
           self.redirect('/codered') 
 
@@ -126,7 +125,5 @@ app = webapp2.WSGIApplication([
     ('/admin/register', RegisterHandler),
     ('/admin/question', QuesHandler),
     ('/instructions', Instruction),
-    ('/codered', Codered),
-    #,
-    #('/start', StartHandler)
+    ('/codered', Codered)
 ], debug=True)
