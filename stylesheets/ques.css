@@ -57,9 +57,9 @@ body{
 	text-align: left;
 }
 textarea{
-	height: 200px;
-	width: 400px;
-	max-width: 430px;
+	height: 250px;
+	width: 500px;
+	max-width: 550px;
 	max-height: 250px;
 }
 #main{
@@ -70,11 +70,12 @@ textarea{
 }
 #one{
 	float: left;
-	width: 60%;
+	width: 70%;
 }
 #two{
+	top: 10px;
 	float: right;
-	width: 40%;
+	width: 30%;
 }
 .submit{
 	width: auto;

@@ -62,7 +62,7 @@ class Question(db.Model):
     choice_2 = db.TextProperty(required = True)
     choice_3 = db.TextProperty(required = True)
     choice_4 = db.TextProperty(required = True)
-
+    answer = db.TextProperty(required = True)
 
 class QuesHandler(Handler):
     def get(self):
@@ -73,8 +73,8 @@ class QuesHandler(Handler):
         ch2 = self.request.get('ch2')
         ch3 = self.request.get('ch3')
         ch4 = self.request.get('ch4')
-
-        Q = Question(question = ques,choice_1 =ch1,choice_2 = ch2,choice_3 = ch3,choice_4 = ch4)
+        ans = self.request.get('ans')
+        Q = Question(question = ques,choice_1 =ch1,choice_2 = ch2,choice_3 = ch3,choice_4 = ch4,answer = ans)
         Q.put()
         self.redirect('/admin/question')
 
@@ -82,4 +82,6 @@ app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/admin/register', RegisterHandler),
     ('/admin/question', QuesHandler)
+    #,
+    #('/start', StartHandler)
 ], debug=True)
