@@ -20,17 +20,17 @@ body{
 	color: rgb(255,127,39);
 }
 .login-box{
-	width: 50%;
+	width: 80%;
 	font-family: inherit;
 	vertical-align: center;
-	margin-left: 25%;
+	margin-left: 10%;
 	border-color: white;
 	border-style:ridge;
 	border-bottom-right-radius: 20px;
 	border-top-left-radius: 20px;
-	margin-top: 10%;
+	margin-top: 2%;
+	margin-bottom: 7%;
 	box-shadow: 0px 0px 10px;
-	
 }
 .login-box h3{
 	margin : 10px;
@@ -41,8 +41,8 @@ body{
 	margin-top: 0;
 }
 .login-form{
-	margin-left: 25%;
-	margin-right: 30%;
+	margin-left: 2%; 
+	margin-right: 2%;
 }
 .login-form input{
 	margin-left: 15px;
@@ -55,7 +55,14 @@ body{
 	border-color: rgb(88,88,88);
 }
 .login-form p{
-	text-align: right;
+	text-align: left;
+}
+#one{
+	height: 200px;
+    overflow-y: scroll;
+}
+pre{
+	max-height: 300px;
 }
 .submit{
 	width: auto;
@@ -66,9 +73,24 @@ body{
 	color: rgb(255,127,39);
 	border-radius: 5px;
 }
-.error{
-    color: red;
+#questionGrid{
+    padding-left: 140px;
+    padding-right: 140px;
 }
+.q{
+    background: rgb(88,88,99);
+    color: rgb(255,137,39);
+    border-radius: 4px;
+    width: 40px;
+    height: 30px;
+}
+.q:hover{
+    background: black;
+}
+.q + .q{
+   margin-top: 10px;
+}
+
 .footer {
     background-color: white;
     height: 40px;

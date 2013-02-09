@@ -112,6 +112,7 @@ class Instruction(Handler):
           self.render('instruction.html')
       
       def post(self):
+          
           self.redirect('/codered')    
 
 class Codered(Handler):              
@@ -120,8 +121,8 @@ class Codered(Handler):
       
       def post(self):
           choice = self.request.get('ch')# choice will contain the option selected (one OR two OR three OR FOUR--REFER start.html)
-          self.render('start.html', choice = choice)
-          #self.redirect('/codered') 
+          questionNo = self.request.get('questionNo')
+          self.render('start.html', question = questionNo)
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
@@ -129,6 +130,4 @@ app = webapp2.WSGIApplication([
     ('/admin/question', QuesHandler),
     ('/instructions', Instruction),
     ('/codered', Codered),
-    #,
-    #('/start', StartHandler)
 ], debug=True)
