@@ -20,10 +20,10 @@ body{
 	color: rgb(255,127,39);
 }
 .login-box{
-	width: 80%;
+	width: 90%;
 	font-family: inherit;
 	vertical-align: center;
-	margin-left: 10%;
+	margin-left: 5%;
 	border-color: white;
 	border-style:ridge;
 	border-bottom-right-radius: 20px;
@@ -38,7 +38,7 @@ body{
 }
 .login-box hr{
 	margin: 10px;
-	margin-top: 0;
+	margin-top: 5px;
 }
 .login-form{
 	margin-left: 2%; 
@@ -58,7 +58,7 @@ body{
 	text-align: left;
 }
 #one{
-	height: 200px;
+	height: 160px;
     overflow-y: scroll;
 }
 pre{
@@ -74,8 +74,7 @@ pre{
 	border-radius: 5px;
 }
 #questionGrid{
-    padding-left: 140px;
-    padding-right: 140px;
+    margin-left: 20%;
 }
 .q{
     background: rgb(88,88,99);
@@ -85,7 +84,7 @@ pre{
     height: 30px;
 }
 .q:hover{
-    background: black;
+    background: white;
 }
 .q + .q{
    margin-top: 10px;
