@@ -76,6 +76,23 @@ pre{
 #questionGrid{
     margin-left: 20%;
 }
+
+.current{
+    background : white; 
+    color: rgb(255,137,39);
+    border-radius: 4px;
+    width: 40px;
+    height: 30px;
+}
+
+.submitted{
+    background : black; 
+    color: rgb(255,137,39);
+    border-radius: 4px;
+    width: 40px;
+    height: 30px;
+}
+
 .q{
     background: rgb(88,88,99);
     color: rgb(255,137,39);
@@ -86,9 +103,14 @@ pre{
 .q:hover{
     background: white;
 }
-.q + .q{
+.q + .q, .submitted + .submitted,.q + .current, .current + .submitted{
    margin-top: 10px;
 }
+
+#msg{
+   color: red;
+}
+
 
 .footer {
     background-color: white;
@@ -103,3 +125,4 @@ pre{
     left: 0px;   
     bottom: 0px;
 }
+

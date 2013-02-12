@@ -2,6 +2,28 @@
 <html>
 <head>
   	<link type="text/css" rel="stylesheet" href="../stylesheets/test.css" />
+  	
+  	
+  	  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+  	  </script>
+      <script> 
+         $(document).ready(function(){
+            // jQuery methods go here...
+              $(".login-form").submit(function(){
+                  var radio_buttons = $("input[name='ch']");
+                  if( radio_buttons.filter(':checked').length == 0){
+                      $("#msg").text("No choice selected!").show().fadeOut(1500);
+                    return false;
+                  } else {
+                    return true;
+                 }
+                  
+              });
+           
+          });  
+        
+      </script>
+  	
 	<title>CodeRed</title>
 </head>
 <body>
@@ -14,6 +36,10 @@
 
 	    	return false; // prevent body scrolling	
 		});
+		
+		function changeClass(){
+          this.setAttribute("class", "myClass");
+       }
 	</script>
 	<div class = 'header'>
 		<div><a href = '#'><span style = 'color : rgb(88,88,88);'>Code</span>Red</a></div>
@@ -22,36 +48,36 @@
 		<h3>CodeRed Questions</h3>
 		<form method = 'post'>
 		   <div id = 'questionGrid'>
-		       <input name = 'questionNo' class = 'q' type = 'submit' value = '1'>
-		       <input class = 'q' type = 'submit' value = '2'>
-		       <input class = 'q' type = 'submit' value = '3'>
-		       <input class = 'q' type = 'submit' value = '4'>
-		       <input class = 'q' type = 'submit' value = '5'>
-		       <input class = 'q' type = 'submit' value = '6'>
-		       <input class = 'q' type = 'submit' value = '7'>
-		       <input class = 'q' type = 'submit' value = '8'>
-		       <input class = 'q' type = 'submit' value = '9'>
-		       <input class = 'q' type = 'submit' value = '10'>
-		       <input class = 'q' type = 'submit' value = '11'>
-		       <input class = 'q' type = 'submit' value = '12'>
-		       <input class = 'q' type = 'submit' value = '13'>
-		       <input class = 'q' type = 'submit' value = '14'>
-		       <input class = 'q' type = 'submit' value = '15'>
-		       <input class = 'q' type = 'submit' value = '16'>
-		       <input class = 'q' type = 'submit' value = '17'>
-		       <input class = 'q' type = 'submit' value = '18'>
-		       <input class = 'q' type = 'submit' value = '19'>
-		       <input class = 'q' type = 'submit' value = '20'>
-		       <input class = 'q' type = 'submit' value = '21'>
-		       <input class = 'q' type = 'submit' value = '22'>
-		       <input class = 'q' type = 'submit' value = '23'>
-		       <input class = 'q' type = 'submit' value = '24'>
-		       <input class = 'q' type = 'submit' value = '25'>
-		       <input class = 'q' type = 'submit' value = '26'>
-		       <input class = 'q' type = 'submit' value = '27'>
-		       <input class = 'q' type = 'submit' value = '28'>
-		       <input class = 'q' type = 'submit' value = '29'>
-		       <input class = 'q' type = 'submit' value = '30'>
+		       <input name = 'questionNo' class = {{class1}} type = 'submit' value = '1' >
+		       <input name = 'questionNo' class = {{class2}} type = 'submit' value = '2'>
+		       <input name = 'questionNo' class = {{class3}} type = 'submit' value = '3'>
+		       <input name = 'questionNo' class = {{class4}} type = 'submit' value = '4'>
+		       <input name = 'questionNo' class = {{class5}} type = 'submit' value = '5'>
+		       <input name = 'questionNo' class = {{class6}} type = 'submit' value = '6'>
+		       <input name = 'questionNo' class = {{class7}} type = 'submit' value = '7'>
+		       <input name = 'questionNo' class = {{class8}} type = 'submit' value = '8'>
+		       <input name = 'questionNo' class = {{class9}} type = 'submit' value = '9'>
+		       <input name = 'questionNo' class = {{class10}} type = 'submit' value = '10'>
+		       <input name = 'questionNo' class = {{class11}} type = 'submit' value = '11'>
+		       <input name = 'questionNo' class = {{class12}} type = 'submit' value = '12'>
+		       <input name = 'questionNo' class = {{class13}} type = 'submit' value = '13'>
+		       <input name = 'questionNo' class = {{class14}} type = 'submit' value = '14'>
+		       <input name = 'questionNo' class = {{class15}} type = 'submit' value = '15'><br/>
+		       <input name = 'questionNo' class = {{class16}} type = 'submit' value = '16'>
+		       <input name = 'questionNo' class = {{class17}} type = 'submit' value = '17'>
+		       <input name = 'questionNo' class = {{class18}} type = 'submit' value = '18'>
+		       <input name = 'questionNo' class = {{class19}} type = 'submit' value = '19'>
+		       <input name = 'questionNo' class = {{class20}} type = 'submit' value = '20'>
+		       <input name = 'questionNo' class = {{class21}} type = 'submit' value = '21'>
+		       <input name = 'questionNo' class = {{class22}} type = 'submit' value = '22'>
+		       <input name = 'questionNo' class = {{class23}} type = 'submit' value = '23'>
+		       <input name = 'questionNo' class = {{class24}} type = 'submit' value = '24'>
+		       <input name = 'questionNo' class = {{class25}} type = 'submit' value = '25'>
+		       <input name = 'questionNo' class = {{class26}} type = 'submit' value = '26'>
+		       <input name = 'questionNo' class = {{class27}} type = 'submit' value = '27'>
+		       <input name = 'questionNo' class = {{class28}} type = 'submit' value = '28'>
+		       <input name = 'questionNo' class = {{class29}} type = 'submit' value = '29'>
+		       <input name = 'questionNo' class = {{class30}} type = 'submit' value = '30'>
 		    </div>
 		 </form>   
 		<hr>
@@ -59,33 +85,37 @@
 		<div id = 'main'>
 			<div id = 'one'>
 				<p>Question 
-					<pre>{{question}}</pre>
+					<pre>{{qno}}.{{question}}</pre>
 				</p>
 			</div>&nbsp;
-			<vr>
 			<div id = 'two'>
-				<p> 
-					<input name = 'ch' type = 'radio' value = 'one'>
-				</p>
-				<p>
-					<input name = 'ch' type = 'radio' value = 'two'>
-				</p>
-				<p> 
-					<input name = 'ch' type = 'radio' value = 'three'>
-				</p>
-				<p> 
-					<input name = 'ch' type = 'radio' value = 'four'>
-				</p>
-				<p>
-					<input class = 'submit' type = 'submit'>
-				</p>
-			</div>&nbsp;
-		</div>
-		</form>
-	</div>
-</body>
-<footer class = 'footer'>
+				    <p> 
+					    <input name = 'ch' type = 'radio' value = 'one'>
+					    {{choice1}}
+				    </p>
+				    <p>
+					    <input name = 'ch' type = 'radio' value = 'two'>
+					    {{choice2}}
+				    </p>
+				    <p> 
+					    <input name = 'ch' type = 'radio' value = 'three'>
+					    {{choice3}}
+				    </p>
+				    <p> 
+					    <input name = 'ch' type = 'radio' value = 'four'>          
+					    {{choice4}}
+				    </p>
+				    <p>
+					    <input class = 'submit' type = 'submit' name = 'submit' value = 'submit'>
+					    <span id='msg'></span>
+				    </p>
+			    </div>&nbsp;
+		    </div>
+		    </form>
+	    </div>
+   </body>
+  <footer class = 'footer'>
 	<img src="https://developers.google.com/appengine/images/appengine-noborder-120x30.gif" 
 	alt="Powered by Google App Engine" />
-</footer>
+  </footer>
 </html>

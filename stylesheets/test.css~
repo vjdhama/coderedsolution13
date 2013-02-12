@@ -20,10 +20,10 @@ body{
 	color: rgb(255,127,39);
 }
 .login-box{
-	width: 80%;
+	width: 90%;
 	font-family: inherit;
 	vertical-align: center;
-	margin-left: 10%;
+	margin-left: 5%;
 	border-color: white;
 	border-style:ridge;
 	border-bottom-right-radius: 20px;
@@ -38,7 +38,7 @@ body{
 }
 .login-box hr{
 	margin: 10px;
-	margin-top: 0;
+	margin-top: 5px;
 }
 .login-form{
 	margin-left: 2%; 
@@ -58,7 +58,7 @@ body{
 	text-align: left;
 }
 #one{
-	height: 200px;
+	height: 160px;
     overflow-y: scroll;
 }
 pre{
@@ -74,9 +74,25 @@ pre{
 	border-radius: 5px;
 }
 #questionGrid{
-    padding-left: 140px;
-    padding-right: 140px;
+    margin-left: 20%;
 }
+
+.current{
+    background : white; 
+    color: rgb(255,137,39);
+    border-radius: 4px;
+    width: 40px;
+    height: 30px;
+}
+
+.submitted{
+    background : black; 
+    color: rgb(255,137,39);
+    border-radius: 4px;
+    width: 40px;
+    height: 30px;
+}
+
 .q{
     background: rgb(88,88,99);
     color: rgb(255,137,39);
@@ -84,13 +100,20 @@ pre{
     width: 40px;
     height: 30px;
 }
-.q:mousedown{
-    background: black;
+.q:hover{
+    background: white;
 }
-.q + .q{
+.q + .q, .submitted + .submitted,.q + .current, .current + .submitted{
    margin-top: 10px;
 }
 
+#msg{
+   color: red;
+}
+
+.myClass{
+   background : black; 
+}
 .footer {
     background-color: white;
     height: 40px;
@@ -104,3 +127,4 @@ pre{
     left: 0px;   
     bottom: 0px;
 }
+
