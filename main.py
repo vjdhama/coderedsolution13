@@ -21,15 +21,10 @@ from google.appengine.ext import db
 jinja_environment = jinja2.Environment(autoescape=True,
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
 
-<<<<<<< HEAD
-def users_key(group = 'default'):
-    return db.Key.from_path('users', group)
-=======
 def teams_key(group = 'default'):
       return db.Key.from_path('teams', group)
 
 SECRET = 'rkuhoi$kjb&JKn%,kn&*@#'
->>>>>>> 88aef902c037ecac820e039868606300bf4788d2
 
 questionNo = 1
 questionSet = []
@@ -49,15 +44,15 @@ def make_secure_val(s):
       return "%s|%s" % (s,hash_str(s))  
           
 class Handler(webapp2.RequestHandler):
-    def write(self, *a, **kw):
-        self.response.out.write(*a, **kw)
+      def write(self, *a, **kw):
+          self.response.out.write(*a, **kw)
         
-    def render_str(self, template, **params):
-        t = jinja_environment.get_template(template)
-        return t.render(params)
+      def render_str(self, template, **params):
+          t = jinja_environment.get_template(template)
+          return t.render(params)
 
-    def render(self, template, **kw):
-        self.write(self.render_str(template, **kw))
+      def render(self, template, **kw):
+          self.write(self.render_str(template, **kw))
    
       def set_secure_cookie(self,name,val):
           cookie_val = make_secure_val(val)
@@ -78,64 +73,45 @@ class Handler(webapp2.RequestHandler):
           teamid = self.read_secure_cookie('team_id')
           self.team = teamid and Register.by_id(int(teamid))  
          
-    def getQuestion(self, cacheFlag = False):
-        global questionNo, questionSet, classMap
-        if cacheFlag == False:
-            questionSet = db.GqlQuery("SELECT * FROM Question")
-        else:
-            self.write('cache')         
-        classMap['question'] = questionSet[int(questionNo)-1].question
-        classMap['choice1'] =  questionSet[int(questionNo)-1].choice_1
-        classMap['choice2'] =  questionSet[int(questionNo)-1].choice_2
-        classMap['choice3'] =  questionSet[int(questionNo)-1].choice_3
-        classMap['choice4'] =  questionSet[int(questionNo)-1].choice_4      
+      def getQuestion(self, cacheFlag = False):
+          global questionNo, questionSet, classMap
+          if cacheFlag == False:
+               questionSet = db.GqlQuery("SELECT * FROM Question")
+          else:
+               self.write('cache')         
+          classMap['question'] = questionSet[int(questionNo)-1].question
+          classMap['choice1'] =  questionSet[int(questionNo)-1].choice_1
+          classMap['choice2'] =  questionSet[int(questionNo)-1].choice_2
+          classMap['choice3'] =  questionSet[int(questionNo)-1].choice_3
+          classMap['choice4'] =  questionSet[int(questionNo)-1].choice_4      
           
                  
 class MainHandler(Handler):
     def get(self):
-        self.render('base.html')
+          self.render('base.html')
           
     def post(self):           
-        teamname = self.request.get('teamname')
-        password = self.request.get('password')
-        u = Register.login(teamname, password)
+          teamname = self.request.get('teamname')
+          password = self.request.get('password')
+          u = Register.login(teamname, password)
           
-<<<<<<< HEAD
-        if u:
-            self.redirect('/instructions')
-        else:
-            msg = 'Invalid login'
-            self.render('base.html', error = msg) 
-=======
           if u:
               self.login(u)
               self.redirect('/instructions')
           else:
               msg = 'Invalid login'
               self.render('base.html', error = msg) 
->>>>>>> 88aef902c037ecac820e039868606300bf4788d2
 
 class Register(db.Model):
-    teamname = db.StringProperty(required = False)
-    password = db.StringProperty(required = True)
-    email = db.StringProperty(required = True)
+     teamname = db.StringProperty(required = False)
+     password = db.StringProperty(required = True)
+     email = db.StringProperty(required = True)
     
-    @classmethod
-    def by_name(cls, teamname):
-        u = Register.all().filter('teamname =', teamname).get()
-        return u
+     @classmethod
+     def by_name(cls, teamname):
+         u = Register.all().filter('teamname =', teamname).get()
+         return u
          
-<<<<<<< HEAD
-    @classmethod
-    def login(cls, teamname, pw):
-        u = cls.by_name(teamname)
-        if u and valid_pw(pw, u.password):
-            return u       
-   
-def valid_pw(pw, pwc):
-    return pw == pwc    
-    
-=======
      @classmethod
      def by_id(cls, teamid):
          return Register.get_by_id(teamid, parent = teams_key()) 
@@ -152,7 +128,6 @@ def valid_pw(pw, pwc):
 def make_salt(length = 5):
     return ''.join(random.choice(string.letters) for x in xrange(length)) 
    
->>>>>>> 88aef902c037ecac820e039868606300bf4788d2
 class RegisterHandler(Handler):
     def make_pass(self):
         return ''.join(random.choice(string.letters) for x in xrange(5))
@@ -193,15 +168,6 @@ class QuesHandler(Handler):
 
 
 class Instruction(Handler):
-<<<<<<< HEAD
-    def get(self):
-        self.render('instruction.html')
-      
-    def post(self):
-        global questionNo
-        questionNo = 1
-        self.redirect('/codered')    
-=======
       def get(self):
           check = self.read_secure_cookie('team_id')
           if check:
@@ -214,23 +180,10 @@ class Instruction(Handler):
           global questionNo
           questionNo = 1
           self.redirect('/codered')    
->>>>>>> 88aef902c037ecac820e039868606300bf4788d2
 
 kflag = False
 
 class Codered(Handler):              
-<<<<<<< HEAD
-    def get(self):
-        global questionNo
-        self.getQuestion()                   
-        self.render('start.html', **classMap)
-
-    def post(self):
-        global questionNo, kflag , questionSet         
-        choice = self.request.get('ch')# choice will contain the choice selected (one OR two OR three OR FOUR--REFER start.html)
-        qNo = self.request.get('questionNo')
-        if qNo != questionNo:
-=======
       def get(self):
           check = self.read_secure_cookie('team_id')
           if check:
@@ -245,46 +198,45 @@ class Codered(Handler):
           choice = self.request.get('ch')# choice will contain the choice selected (one OR two OR three OR FOUR--REFER start.html)
           qNo = self.request.get('questionNo')
           if qNo != questionNo:
->>>>>>> 88aef902c037ecac820e039868606300bf4788d2
                   #if user goes to a different question
                   #kflag is used to check if the current question is alredy submitted
-                if qNo :
-                    if kflag == False:
-                            classMap['class'+str(questionNo)] ='q'
-                    else:
-                            classMap['class'+str(questionNo)] ='submitted'   
-                    if classMap['class'+str(qNo)] == 'submitted' :
-                            kflag = True  
-                    else:
-                            kflag = False       
+                  if qNo :
+                      if kflag == False:
+                             classMap['class'+str(questionNo)] ='q'
+                      else:
+                             classMap['class'+str(questionNo)] ='submitted'   
+                      if classMap['class'+str(qNo)] == 'submitted' :
+                             kflag = True  
+                      else:
+                             kflag = False       
                       
-                    classMap['class'+str(qNo)] ='current'    
-                    questionNo = qNo 
-                    classMap['qno'] = questionNo       
+                      classMap['class'+str(qNo)] ='current'    
+                      questionNo = qNo 
+                      classMap['qno'] = questionNo       
                       
                     #if user presses submit button    
-                if not qNo:
-                    submit = self.request.get('submit')   
-                    if submit and choice:
-                        classMap['class'+str(questionNo)] ='submitted'
-                        temp = int(questionNo)
-                         
-                        while classMap['class'+str(temp)] =='submitted':
-                            temp += 1
-                            if temp > 30:
-                                temp = 1
-                            if temp == int(questionNo):
-                                break
+                  if not qNo:
+                      submit = self.request.get('submit')   
+                      if submit and choice:
+                          classMap['class'+str(questionNo)] ='submitted'
+                          temp = int(questionNo)
+                          
+                          while classMap['class'+str(temp)] =='submitted':
+                              temp += 1
+                              if temp > 30:
+                                   temp = 1
+                              if temp == int(questionNo):
+                                   break
                           # 
-                        if temp == int(questionNo):
-                            kflag = True 
-                            classMap['class'+str(temp)] ='submitted'             
-                        else:          
-                            classMap['class'+str(temp)] ='current'   
-                        questionNo = temp           
-                        classMap['qno'] = questionNo 
-                self.getQuestion(True)                                                        
-        self.render('start.html', **classMap)
+                          if temp == int(questionNo):
+                                    kflag = True 
+                                    classMap['class'+str(temp)] ='submitted'             
+                          else:          
+                                    classMap['class'+str(temp)] ='current'   
+                          questionNo = temp           
+                          classMap['qno'] = questionNo 
+                  self.getQuestion(True)                                                        
+          self.render('start.html', **classMap)
 
 class Logout(MainHandler):
       def get(self):
