@@ -30,20 +30,36 @@
   	     var myVar=setInterval(function(){myTimer()},1000);
          function myTimer()
 		 {
-		 var d=document.getElementById("demo").innerHTML;
-		 var t=d.split(":");
-		 if (t[1] == 0)
+		 var min=document.getElementById("min").value;
+		 var sec=document.getElementById("sec").value;
+		 
+		 if (sec == 0)
 		 {
-             t[0] = t[0] - 1;
-             t[1] = 59;
+             min = min - 1;
+             sec = 59;
 		 }
 		 else
 		 {
-		 	 t[1] = t[1] - 1;
+		 	 sec = sec - 1;
 		 }
-		 document.getElementById("demo").innerHTML=t[0] + ":" + t[1];
+		 if(min<10)
+		 {
+		 	min = '0' + (min%10)
+		 }
+		 if(sec<10)
+		 {
+		 	sec = '0' + sec%10
+		 }
+		 if (sec == 0 && min == 0)
+		 {
+		 	clearInterval(myVar);
+		 }
+		 document.getElementById("min").value = min;
+		 document.getElementById("sec").value = sec;
 		}
+
   	  </script>
+
 	<title>CodeRed</title>
 </head>
 <body>
@@ -66,8 +82,12 @@
 	</div>
 	<div class = "login-box">
 		<h3>CodeRed Questions</h3>
-		<div id = "demo">30:00</div>
 		<form method = 'post'>
+			<div id="demo">
+			    <input name = 'timer1' type = 'text' id ="min" class = "timer" value={{timer1}} readonly/>&nbsp;:
+			    <input name = 'timer2' type = 'text' id ="sec" class = "timer" value={{timer2}} readonly/>
+			</div>
+		
 		   <div id = 'questionGrid'>
 		       <input name = 'questionNo' class = {{class1}} type = 'submit' value = '1' >
 		       <input name = 'questionNo' class = {{class2}} type = 'submit' value = '2'>
@@ -103,6 +123,10 @@
 		 </form>   
 		<hr>
 		<form method = 'post' class = 'login-form'>
+			<div id="demo2">
+			    <input name = 'timer1' type = 'text' id ="min" class = "timer" value={{timer1}} readonly/>&nbsp;:
+			    <input name = 'timer2' type = 'text' id ="sec" class = "timer" value={{timer2}} readonly/>
+			</div>
 		<div id = 'main'>
 			<div id = 'one'>
 				<p>Question 

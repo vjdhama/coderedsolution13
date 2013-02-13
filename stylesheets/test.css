@@ -90,8 +90,20 @@ pre{
 }
 
 #demo{
-    margin-left: 70%;
+    margin-left: 84%;
 
+}
+
+#demo2{
+	display: none;
+}
+.timer{
+	background : black; 
+    color: rgb(255,137,39);
+    border-radius: 4px;
+    width: 40px;
+    height: 30px;
+    text-align: center;
 }
 .submit{
 	width: auto;

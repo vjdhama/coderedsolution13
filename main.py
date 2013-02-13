@@ -29,7 +29,7 @@ SECRET = 'rkuhoi$kjb&JKn%,kn&*@#'
 questionNo = 1
 questionSet = []
 
-classMap = dict(qno = questionNo,class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
+classMap = dict(timer1= '01',timer2 = '03', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
 
  
 def check_secure_val(h):
@@ -194,7 +194,9 @@ class Codered(Handler):
              self.redirect('/') 
           
       def post(self):
-          global questionNo, kflag , questionSet         
+          global questionNo, kflag , questionSet, classMap 
+          classMap['timer1'] = self.request.get('timer1')  
+          classMap['timer2'] = self.request.get('timer2')      
           choice = self.request.get('ch')# choice will contain the choice selected (one OR two OR three OR FOUR--REFER start.html)
           qNo = self.request.get('questionNo')
           if qNo != questionNo:
