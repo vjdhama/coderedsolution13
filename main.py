@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import webapp2, os, string, random 
+import webapp2, os, string, random, time 
 import jinja2
 from google.appengine.ext import db
 
@@ -53,21 +53,20 @@ class MainHandler(Handler):
               self.render('base.html', error = msg) 
 
 class Register(db.Model):
-     teamname = db.StringProperty(required = False)
-     password = db.StringProperty(required = True)
-     email = db.StringProperty(required = True)
+    teamname = db.StringProperty(required = False)
+    password = db.StringProperty(required = True)
+    email = db.StringProperty(required = True)
     
-     @classmethod
-     def by_name(cls, teamname):
-         u = Register.all().filter('teamname =', teamname).get()
-         return u
+    @classmethod
+    def by_name(cls, teamname):
+        u = Register.all().filter('teamname =', teamname).get()
+        return u
          
-                         
-     @classmethod
-     def login(cls, teamname, pw):
-         u = cls.by_name(teamname)
-         if u and valid_pw(pw, u.password):
-              return u       
+    @classmethod
+    def login(cls, teamname, pw):
+        u = cls.by_name(teamname)
+        if u and valid_pw(pw, u.password):
+            return u       
    
 def valid_pw(pw, pwc):
     return pw == pwc    
@@ -108,22 +107,25 @@ class QuesHandler(Handler):
         self.redirect('/admin/question')
 
 class Instruction(Handler):
-      def get(self):
-          self.render('instruction.html')
+    def get(self):
+        self.render('instruction.html')
       
-      def post(self):
-          
-          self.redirect('/codered')    
+    def post(self):
+        self.redirect('/codered')    
 
 class Codered(Handler):              
-      def get(self):
-          self.render('start.html')
-      
-      def post(self):
-          choice = self.request.get('ch')# choice will contain the option selected (one OR two OR three OR FOUR--REFER start.html)
-          questionNo = self.request.get('questionNo')
-          self.render('start.html', question = questionNo)
+    def time(self):
+        pass
 
+    def get(self):
+        self.render('start.html')
+      
+    def post(self):
+        l= db.GqlQuery("SELECT * FROM Question")
+        choice = self.request.get('ch')# choice will contain the option selected (one OR two OR three OR FOUR--REFER start.html)
+        questionNo = self.request.get('questionNo')
+        self.render('start.html', question = questionNo)
+        
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/admin/register', RegisterHandler),
