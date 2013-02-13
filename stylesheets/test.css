@@ -88,6 +88,11 @@ body{
 pre{
 	max-height: 300px;
 }
+
+#demo{
+    margin-left: 70%;
+
+}
 .submit{
 	width: auto;
 	padding: 9px 15px;

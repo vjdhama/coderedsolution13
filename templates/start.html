@@ -25,6 +25,25 @@
         
       </script>
   	
+  	  <script>
+
+  	     var myVar=setInterval(function(){myTimer()},1000);
+         function myTimer()
+		 {
+		 var d=document.getElementById("demo").innerHTML;
+		 var t=d.split(":");
+		 if (t[1] == 0)
+		 {
+             t[0] = t[0] - 1;
+             t[1] = 59;
+		 }
+		 else
+		 {
+		 	 t[1] = t[1] - 1;
+		 }
+		 document.getElementById("demo").innerHTML=t[0] + ":" + t[1];
+		}
+  	  </script>
 	<title>CodeRed</title>
 </head>
 <body>
@@ -47,6 +66,7 @@
 	</div>
 	<div class = "login-box">
 		<h3>CodeRed Questions</h3>
+		<div id = "demo">30:00</div>
 		<form method = 'post'>
 		   <div id = 'questionGrid'>
 		       <input name = 'questionNo' class = {{class1}} type = 'submit' value = '1' >
