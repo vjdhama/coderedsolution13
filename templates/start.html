@@ -10,26 +10,46 @@
       <script> 
          $(document).ready(function(){
             // jQuery methods go here...
-              $("form").submit(function(){
-              	  var min=document.getElementById("min").value;
-		          var sec=document.getElementById("sec").value;
-                  var radio_buttons = $("input[name='ch']");
-                  var sub= $("input[name='submit']");
-                  if (sec == 0 && min == 0)
-                  {
-                  	$("#msg").text("Your loop has been closed!").show().fadeOut(1500);
-                  	return false;
-                  }
-                  else if( radio_buttons.filter(':checked').length == 0  && sub.Clicked == true){
-                        $("#msg").text("No choice selected!").show().fadeOut(1500);
-                     return false;
-                  }
-                  else {
-                    return true;
-                 }
-                  
-              });
-          });  
+             var submitActor = null;
+             var $form = $( 'form' );
+             var $submitActors = $form.find( 'input[type=submit]' );
+
+		    $form.submit( function( event )
+		    {
+		       var min=document.getElementById("min").value;
+			   var sec=document.getElementById("sec").value;
+		       var radio_buttons = $("input[name='ch']");
+		      if ( null === submitActor )
+		      {
+		        // If no actor is explicitly clicked, the browser will
+		        // automatically choose the first in source-order
+		        // so we do the same here
+		        submitActor = $submitActors[0];
+		      }
+
+		      
+		      if (sec == 0 && min == 0)
+		       {
+		         $("#msg").text("Your loop has been closed!").show().fadeOut(1500);
+		          return false;
+		       }
+		      else if( radio_buttons.filter(':checked').length == 0  && submitActor.name == "submit"){
+		         $("#msg").text("No choice selected!").show().fadeOut(1500);
+		           return false;
+		       }
+		      else {
+		         return true;
+		       }
+
+
+		    });
+
+		    $submitActors.click( function( event )
+		    {
+		      submitActor = this;
+		    });
+
+		  });  
         
       </script>
   	
