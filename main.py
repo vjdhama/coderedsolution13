@@ -31,6 +31,15 @@ questionSet = {}
 
 classMap = dict(timer1= '01',timer2 = '04', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
 
+def reset():
+      global questionNo, classMap
+      questionNo = 1
+      for x in range(1, 31):
+          classMap['class' + str(x)] = 'q'
+      classMap['timer1'] = '01'
+      classMap['timer2'] = '04'
+      classMap['class1'] = 'current'   
+
  
 def check_secure_val(h):
       val= h.strip().split('|')[0]
@@ -107,6 +116,7 @@ class MainHandler(Handler):
           
           if u:
               self.login(u)
+              reset()
               self.redirect('/instructions')
           else:
               msg = 'Invalid login'
@@ -187,8 +197,6 @@ class Instruction(Handler):
           
           
       def post(self):
-          global questionNo
-          questionNo = 1
           self.redirect('/codered')    
 
 kflag = False
