@@ -10,17 +10,25 @@
       <script> 
          $(document).ready(function(){
             // jQuery methods go here...
-              $(".login-form").submit(function(){
+              $("form").submit(function(){
+              	  var min=document.getElementById("min").value;
+		          var sec=document.getElementById("sec").value;
                   var radio_buttons = $("input[name='ch']");
-                  if( radio_buttons.filter(':checked').length == 0){
-                      $("#msg").text("No choice selected!").show().fadeOut(1500);
-                    return false;
-                  } else {
+                  var sub= $("input[name='submit']");
+                  if (sec == 0 && min == 0)
+                  {
+                  	$("#msg").text("Your loop has been closed!").show().fadeOut(1500);
+                  	return false;
+                  }
+                  else if( radio_buttons.filter(':checked').length == 0  && sub.Clicked == true){
+                        $("#msg").text("No choice selected!").show().fadeOut(1500);
+                     return false;
+                  }
+                  else {
                     return true;
                  }
                   
               });
-           
           });  
         
       </script>
@@ -32,7 +40,13 @@
 		 {
 		 var min=document.getElementById("min").value;
 		 var sec=document.getElementById("sec").value;
-		 
+		 if (sec == 0 && min == 0)
+		 {
+		 	clearInterval(myVar);
+		 	document.getElementById("min").value = 00;
+		    document.getElementById("sec").value = 00;
+		    return ;
+		 }
 		 if (sec == 0)
 		 {
              min = min - 1;
@@ -53,9 +67,14 @@
 		 if (sec == 0 && min == 0)
 		 {
 		 	clearInterval(myVar);
+		 	document.getElementById("min").value = 00;
+		    document.getElementById("sec").value = 00;
 		 }
-		 document.getElementById("min").value = min;
-		 document.getElementById("sec").value = sec;
+		 else
+		 {
+		    document.getElementById("min").value = min;
+		    document.getElementById("sec").value = sec;
+		}
 		}
 
   	  </script>
@@ -120,44 +139,42 @@
 		       <input name = 'questionNo' class = {{class29}} type = 'submit' value = '29'>
 		       <input name = 'questionNo' class = {{class30}} type = 'submit' value = '30'>
 		    </div>
-		 </form>   
-		<hr>
-		<form method = 'post' class = 'login-form'>
-			<div id="demo2">
-			    <input name = 'timer1' type = 'text' id ="min" class = "timer" value={{timer1}} readonly/>&nbsp;:
-			    <input name = 'timer2' type = 'text' id ="sec" class = "timer" value={{timer2}} readonly/>
-			</div>
-		<div id = 'main'>
-			<div id = 'one'>
-				<p>Question 
-					<pre>{{qno}}.{{question}}</pre>
-				</p>
-			</div>&nbsp;
-			<div id = 'two'>
-				    <p> 
-					    <input name = 'ch' type = 'radio' value = 'one'>
-					    {{choice1}}
-				    </p>
-				    <p>
-					    <input name = 'ch' type = 'radio' value = 'two'>
-					    {{choice2}}
-				    </p>
-				    <p> 
-					    <input name = 'ch' type = 'radio' value = 'three'>
-					    {{choice3}}
-				    </p>
-				    <p> 
-					    <input name = 'ch' type = 'radio' value = 'four'>          
-					    {{choice4}}
-				    </p>
-				    <p>
-					    <input class = 'submit' type = 'submit' name = 'submit' value = 'submit'>
-					    <span id='msg'></span>
-				    </p>
-			    </div>&nbsp;
+		   
+			<hr>
+			<div class = 'login-form'>
+				
+			    <div id = 'main'>
+				  <div id = 'one'>
+					<p>Question 
+						<pre>{{qno}}.{{question}}</pre>
+					</p>
+				  </div>&nbsp;
+				  <div id = 'two'>
+					    <p> 
+						    <input name = 'ch' type = 'radio' value = 'one'>
+						    {{choice1}}
+					    </p>
+					    <p>
+						    <input name = 'ch' type = 'radio' value = 'two'>
+						    {{choice2}}
+					    </p>
+					    <p> 
+						    <input name = 'ch' type = 'radio' value = 'three'>
+						    {{choice3}}
+					    </p>
+					    <p> 
+						    <input name = 'ch' type = 'radio' value = 'four'>          
+						    {{choice4}}
+					    </p>
+					    <p>
+						    <input class = 'submit' type = 'submit' name = 'submit' value = 'submit'  >
+						    <span id='msg'></span>
+					    </p>
+				    </div>&nbsp;
+			     </div>
+              </div>
+			  </form>
 		    </div>
-		    </form>
-	    </div>
    </body>
   <footer class = 'footer'>
 	<img src="https://developers.google.com/appengine/images/appengine-noborder-120x30.gif" 
