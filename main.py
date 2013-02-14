@@ -22,7 +22,7 @@ jinja_environment = jinja2.Environment(autoescape=True,
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
 
 def users_key(group = 'default'):
-      return db.Key.from_path('users', group)
+    return db.Key.from_path('users', group)
 
 questionNo = 1
 questionSet = []
@@ -31,65 +31,64 @@ classMap = dict(qno = questionNo,class29= 'q', class28= 'q', class21= 'q', class
 
           
 class Handler(webapp2.RequestHandler):
-      def write(self, *a, **kw):
-          self.response.out.write(*a, **kw)
+    def write(self, *a, **kw):
+        self.response.out.write(*a, **kw)
         
-      def render_str(self, template, **params):
-          t = jinja_environment.get_template(template)
-          return t.render(params)
+    def render_str(self, template, **params):
+        t = jinja_environment.get_template(template)
+        return t.render(params)
 
-      def render(self, template, **kw):
-          self.write(self.render_str(template, **kw))
+    def render(self, template, **kw):
+        self.write(self.render_str(template, **kw))
    
          
-      def getQuestion(self, cacheFlag = False):
-          global questionNo, questionSet, classMap
-          if cacheFlag == False:
-               questionSet = db.GqlQuery("SELECT * FROM Question")
-          else:
-               self.write('cache')         
-          classMap['question'] = questionSet[int(questionNo)-1].question
-          classMap['choice1'] =  questionSet[int(questionNo)-1].choice_1
-          classMap['choice2'] =  questionSet[int(questionNo)-1].choice_2
-          classMap['choice3'] =  questionSet[int(questionNo)-1].choice_3
-          classMap['choice4'] =  questionSet[int(questionNo)-1].choice_4      
+    def getQuestion(self, cacheFlag = False):
+        global questionNo, questionSet, classMap
+        if cacheFlag == False:
+            questionSet = db.GqlQuery("SELECT * FROM Question")
+        else:
+            self.write('cache')         
+        classMap['question'] = questionSet[int(questionNo)-1].question
+        classMap['choice1'] =  questionSet[int(questionNo)-1].choice_1
+        classMap['choice2'] =  questionSet[int(questionNo)-1].choice_2
+        classMap['choice3'] =  questionSet[int(questionNo)-1].choice_3
+        classMap['choice4'] =  questionSet[int(questionNo)-1].choice_4      
           
                  
 class MainHandler(Handler):
     def get(self):
-          self.render('base.html')
+        self.render('base.html')
           
     def post(self):           
-          teamname = self.request.get('teamname')
-          password = self.request.get('password')
-          u = Register.login(teamname, password)
+        teamname = self.request.get('teamname')
+        password = self.request.get('password')
+        u = Register.login(teamname, password)
           
-          if u:
-              self.redirect('/instructions')
-          else:
-              msg = 'Invalid login'
-              self.render('base.html', error = msg) 
+        if u:
+            self.redirect('/instructions')
+        else:
+            msg = 'Invalid login'
+            self.render('base.html', error = msg) 
 
 class Register(db.Model):
-     teamname = db.StringProperty(required = False)
-     password = db.StringProperty(required = True)
-     email = db.StringProperty(required = True)
+    teamname = db.StringProperty(required = False)
+    password = db.StringProperty(required = True)
+    email = db.StringProperty(required = True)
     
-     @classmethod
-     def by_name(cls, teamname):
-         u = Register.all().filter('teamname =', teamname).get()
-         return u
+    @classmethod
+    def by_name(cls, teamname):
+        u = Register.all().filter('teamname =', teamname).get()
+        return u
          
-                         
-     @classmethod
-     def login(cls, teamname, pw):
-         u = cls.by_name(teamname)
-         if u and valid_pw(pw, u.password):
-              return u       
+    @classmethod
+    def login(cls, teamname, pw):
+        u = cls.by_name(teamname)
+        if u and valid_pw(pw, u.password):
+            return u       
    
 def valid_pw(pw, pwc):
     return pw == pwc    
-   
+    
 class RegisterHandler(Handler):
     def make_pass(self):
         return ''.join(random.choice(string.letters) for x in xrange(5))
@@ -130,66 +129,66 @@ class QuesHandler(Handler):
 
 
 class Instruction(Handler):
-      def get(self):
-          self.render('instruction.html')
+    def get(self):
+        self.render('instruction.html')
       
-      def post(self):
-          global questionNo
-          questionNo = 1
-          self.redirect('/codered')    
+    def post(self):
+        global questionNo
+        questionNo = 1
+        self.redirect('/codered')    
 
 kflag = False
 
 class Codered(Handler):              
-      def get(self):
-          global questionNo
-          self.getQuestion()                   
-          self.render('start.html', **classMap)
-      
-      def post(self):
-          global questionNo, kflag , questionSet         
-          choice = self.request.get('ch')# choice will contain the choice selected (one OR two OR three OR FOUR--REFER start.html)
-          qNo = self.request.get('questionNo')
-          if qNo != questionNo:
+    def get(self):
+        global questionNo
+        self.getQuestion()                   
+        self.render('start.html', **classMap)
+
+    def post(self):
+        global questionNo, kflag , questionSet         
+        choice = self.request.get('ch')# choice will contain the choice selected (one OR two OR three OR FOUR--REFER start.html)
+        qNo = self.request.get('questionNo')
+        if qNo != questionNo:
                   #if user goes to a different question
                   #kflag is used to check if the current question is alredy submitted
-                  if qNo :
-                      if kflag == False:
-                             classMap['class'+str(questionNo)] ='q'
-                      else:
-                             classMap['class'+str(questionNo)] ='submitted'   
-                      if classMap['class'+str(qNo)] == 'submitted' :
-                             kflag = True  
-                      else:
-                             kflag = False       
+                if qNo :
+                    if kflag == False:
+                            classMap['class'+str(questionNo)] ='q'
+                    else:
+                            classMap['class'+str(questionNo)] ='submitted'   
+                    if classMap['class'+str(qNo)] == 'submitted' :
+                            kflag = True  
+                    else:
+                            kflag = False       
                       
-                      classMap['class'+str(qNo)] ='current'    
-                      questionNo = qNo 
-                      classMap['qno'] = questionNo       
+                    classMap['class'+str(qNo)] ='current'    
+                    questionNo = qNo 
+                    classMap['qno'] = questionNo       
                       
                     #if user presses submit button    
-                  if not qNo:
-                      submit = self.request.get('submit')   
-                      if submit and choice:
-                          classMap['class'+str(questionNo)] ='submitted'
-                          temp = int(questionNo)
-                          
-                          while classMap['class'+str(temp)] =='submitted':
-                              temp += 1
-                              if temp > 30:
-                                   temp = 1
-                              if temp == int(questionNo):
-                                   break
+                if not qNo:
+                    submit = self.request.get('submit')   
+                    if submit and choice:
+                        classMap['class'+str(questionNo)] ='submitted'
+                        temp = int(questionNo)
+                         
+                        while classMap['class'+str(temp)] =='submitted':
+                            temp += 1
+                            if temp > 30:
+                                temp = 1
+                            if temp == int(questionNo):
+                                break
                           # 
-                          if temp == int(questionNo):
-                                    kflag = True 
-                                    classMap['class'+str(temp)] ='submitted'             
-                          else:          
-                                    classMap['class'+str(temp)] ='current'   
-                          questionNo = temp           
-                          classMap['qno'] = questionNo 
-                  self.getQuestion(True)                                                        
-          self.render('start.html', **classMap)
+                        if temp == int(questionNo):
+                            kflag = True 
+                            classMap['class'+str(temp)] ='submitted'             
+                        else:          
+                            classMap['class'+str(temp)] ='current'   
+                        questionNo = temp           
+                        classMap['qno'] = questionNo 
+                self.getQuestion(True)                                                        
+        self.render('start.html', **classMap)
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),

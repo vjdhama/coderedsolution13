@@ -5,6 +5,7 @@ body{
 	margin: 0 auto;
 }
 .header{
+	/*font-family: 'Podkova', sans-serif;*/
 	font-family: 'Glegoo', serif;
 	cursor: pointer;
 	text-shadow: 1px 1px 1px #7B92A8;
@@ -21,7 +22,7 @@ body{
 	width: 300px;
 	font-weight: bold;
 	text-align: center;
-	margin-left: 41%;
+	margin-left: 40%;
 }
 .header div a{
 	vertical-align: bottom;
@@ -29,6 +30,7 @@ body{
 	text-decoration: none;
 	color: rgb(255,127,39);
 }
+
 .login-box{
 	width: 70%;
 	font-family: inherit;
@@ -59,22 +61,8 @@ body{
 	margin: 10px;
 	margin-top: 0;
 }
-.login-form{
-	margin-left: 2%; 
-	margin-right: 2%;
-}
-.login-form input{
-	margin-left: 15px;
-	color: rgb(88,88,88);
-	padding: 5px;
-	border: solid 1px #E5E5E5;
-	box-shadow: rgba(0,0,0, 0.1) 0px 0px 10px;
-}
-.login-form input:hover,input:focus{
-	border-color: rgb(88,88,88);
-}
-.login-form p{
-	text-align: left;
+.instruction{
+	color: white;
 }
 textarea{
 	height: 250px;
