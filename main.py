@@ -78,7 +78,7 @@ class Handler(webapp2.RequestHandler):
           if cacheFlag == False:
                questionSet = db.GqlQuery("SELECT * FROM Question")
           else:
-               self.write('cache')         
+               pass        
           classMap['question'] = questionSet[int(questionNo)-1].question
           classMap['choice1'] =  questionSet[int(questionNo)-1].choice_1
           classMap['choice2'] =  questionSet[int(questionNo)-1].choice_2
@@ -197,10 +197,7 @@ class Codered(Handler):
           global questionNo, kflag , questionSet, classMap 
           classMap['timer1'] = self.request.get('timer1')  
           classMap['timer2'] = self.request.get('timer2')  
-          if int(classMap['timer1']) == 0 and int(classMap['timer2'] == 0):
-                 self.write('done')
-          self.write(classMap['timer1'])
-          self.write(classMap['timer2'])
+      
           choice = self.request.get('ch')# choice will contain the choice selected (one OR two OR three OR FOUR--REFER start.html)
           qNo = self.request.get('questionNo')
           if qNo != questionNo:
