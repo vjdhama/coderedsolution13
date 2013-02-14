@@ -27,7 +27,7 @@ def teams_key(group = 'default'):
 SECRET = 'rkuhoi$kjb&JKn%,kn&*@#'
 
 questionNo = 1
-questionSet = []
+questionSet = {}
 
 classMap = dict(timer1= '01',timer2 = '04', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
 
@@ -76,15 +76,25 @@ class Handler(webapp2.RequestHandler):
       def getQuestion(self, cacheFlag = False):
           global questionNo, questionSet, classMap
           if cacheFlag == False:
-               questionSet = db.GqlQuery("SELECT * FROM Question")
+                query = Question.all()
+                qdir = {}#for storing all questions
+                key = 0#for key in qdir
+                for ques in query:
+                    key = key + 1
+                    qdir[key] = [ques.question,ques.choice_1,ques.choice_2,ques.choice_3,ques.choice_4,ques.answer]#qdir = {key : list}
+                
+                a = random.randint(1,key-3)
+                newkey = 0
+                for x in xrange(a,a+4):
+                    newkey = newkey + 1
+                    questionSet[newkey] = qdir[x]
           else:
                pass        
-          classMap['question'] = questionSet[int(questionNo)-1].question
-          classMap['choice1'] =  questionSet[int(questionNo)-1].choice_1
-          classMap['choice2'] =  questionSet[int(questionNo)-1].choice_2
-          classMap['choice3'] =  questionSet[int(questionNo)-1].choice_3
-          classMap['choice4'] =  questionSet[int(questionNo)-1].choice_4      
-          
+          classMap['question'] = questionSet[int(questionNo)][0]
+          classMap['choice1'] =  questionSet[int(questionNo)][1]
+          classMap['choice2'] =  questionSet[int(questionNo)][2]
+          classMap['choice3'] =  questionSet[int(questionNo)][3]
+          classMap['choice4'] =  questionSet[int(questionNo)][4]      
                  
 class MainHandler(Handler):
     def get(self):
