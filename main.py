@@ -28,7 +28,7 @@ SECRET = 'rkuhoi$kjb&JKn%,kn&*@#'
 
 questionNo = 1
 questionSet = {}
-
+solution = dict(solved = [], correct = 0, wrong = 0, totalAttempted = 0, score = 0)
 classMap = dict(timer1= '01',timer2 = '04', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
 
 def reset():
@@ -36,6 +36,11 @@ def reset():
       questionNo = 1
       for x in range(1, 31):
           classMap['class' + str(x)] = 'q'
+          solution[x] = None
+      solution['correct'] = 0
+      solution['wrong'] = 0
+      solution['totalAttempted'] = 0
+      solution['score'] = 0   
       classMap['timer1'] = '01'
       classMap['timer2'] = '04'
       classMap['class1'] = 'current'   
@@ -83,7 +88,7 @@ class Handler(webapp2.RequestHandler):
           self.team = teamid and Register.by_id(int(teamid))  
          
       def getQuestion(self, cacheFlag = False):
-          global questionNo, questionSet, classMap
+          global questionNo, questionSet, solution, classMap
           if cacheFlag == False:
                 query = Question.all()
                 qdir = {}#for storing all questions
@@ -91,7 +96,8 @@ class Handler(webapp2.RequestHandler):
                 for ques in query:
                     key = key + 1
                     qdir[key] = [ques.question,ques.choice_1,ques.choice_2,ques.choice_3,ques.choice_4,ques.answer]#qdir = {key : list}
-                
+                    solution[key] = ques.answer
+
                 a = random.randint(1,key-3)
                 newkey = 0
                 for x in xrange(a,a+4):
@@ -199,7 +205,17 @@ class Instruction(Handler):
       def post(self):
           self.redirect('/codered')    
 
-kflag = False
+quesAlreadySubmitted = False
+def setScore(choice):
+      global questionNo, solution
+      if int(questionNo) not in solution['solved']:
+          solution['solved'].append(int(questionNo))
+          if int(solution[int(questionNo)]) == int(choice):
+                 solution['correct'] += 1
+          else:
+                 solution['wrong'] += 1
+          solution['totalAttempted'] += 1              
+
 
 class Codered(Handler):              
       def get(self):
@@ -212,24 +228,26 @@ class Codered(Handler):
              self.redirect('/') 
           
       def post(self):
-          global questionNo, kflag , questionSet, classMap 
+          global questionNo, quesAlreadySubmitted , questionSet, classMap, solution 
           classMap['timer1'] = self.request.get('timer1')  
           classMap['timer2'] = self.request.get('timer2')  
-      
+          completed = self.request.get('viewscore')
+          if completed:
+              self.redirect('/score')
           choice = self.request.get('ch')# choice will contain the choice selected (one OR two OR three OR FOUR--REFER start.html)
           qNo = self.request.get('questionNo')
           if qNo != questionNo:
                   #if user goes to a different question
-                  #kflag is used to check if the current question is alredy submitted
+                  #quesAlreadySubmitted is used to check if the current question is alredy submitted
                   if qNo :
-                      if kflag == False:
+                      if quesAlreadySubmitted == False:
                              classMap['class'+str(questionNo)] ='q'
                       else:
                              classMap['class'+str(questionNo)] ='submitted'   
                       if classMap['class'+str(qNo)] == 'submitted' :
-                             kflag = True  
+                             quesAlreadySubmitted = True  
                       else:
-                             kflag = False       
+                             quesAlreadySubmitted = False       
                       
                       classMap['class'+str(qNo)] ='current'    
                       questionNo = qNo 
@@ -239,6 +257,7 @@ class Codered(Handler):
                   if not qNo:
                       submit = self.request.get('submit')   
                       if submit and choice:
+                          setScore(choice)
                           classMap['class'+str(questionNo)] ='submitted'
                           temp = int(questionNo)
                           
@@ -250,14 +269,27 @@ class Codered(Handler):
                                    break
                           # 
                           if temp == int(questionNo):
-                                    kflag = True 
+                                    quesAlreadySubmitted = True 
                                     classMap['class'+str(temp)] ='submitted'             
                           else:          
                                     classMap['class'+str(temp)] ='current'   
                           questionNo = temp           
                           classMap['qno'] = questionNo 
-                  self.getQuestion(True)                                                        
+                  self.getQuestion(True)                                                                
           self.render('start.html', **classMap)
+
+class Score(MainHandler):
+      def get(self):
+          score = {}
+          score['correct'] = solution['correct']
+          score['wrong'] = solution['wrong']
+          score['attempted'] = solution['totalAttempted'] 
+          score['score'] = (int(solution['correct']) * 3) - int(solution['wrong'])  
+          self.render('score.html', **score) 
+      
+      def post(self):
+          self.logout()
+          self.redirect('/') 
 
 class Logout(MainHandler):
       def get(self):
@@ -270,5 +302,6 @@ app = webapp2.WSGIApplication([
     ('/admin/question', QuesHandler),
     ('/instructions', Instruction),
     ('/codered', Codered),
+    ('/score', Score),
     ('/logout', Logout),
 ], debug=True)

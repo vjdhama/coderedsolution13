@@ -11,7 +11,7 @@
          $(document).ready(function(){
             // jQuery methods go here...
              var submitActor = null;
-             var $form = $( 'form' );
+             var $form = $( '#quesform' );
              var $submitActors = $form.find( 'input[type=submit]' );
 
 		    $form.submit( function( event )
@@ -49,10 +49,13 @@
 		      submitActor = this;
 		    });
 
+
+
 		  });  
         
-      </script>
-  	
+         
+  	  </script>
+
   	  <script>
 
   	     var myVar=setInterval(function(){myTimer()},1000);
@@ -89,6 +92,8 @@
 		 	clearInterval(myVar);
 		 	document.getElementById("min").value = 00;
 		    document.getElementById("sec").value = 00;
+		    $("#login-box").slideUp("slow");
+		    $("#score").slideDown("slow");
 		 }
 		 else
 		 {
@@ -119,9 +124,14 @@
 	<div class = 'header'>
 		<div><a href = '#'>{ CODERED<sup> 2013</sup>}</a></div>
 	</div>
-	<div class = "login-box">
+	<div id="score">
+        <form method="post">
+          <input name = 'viewscore' class ="vscore" type = 'submit' value = 'View Score' >
+        </form> 
+	</div>
+	<div id = "login-box">
 		<h3>CodeRed Questions</h3>
-		<form method = 'post'>
+		<form method = 'post' id="quesform">
 			<div id="demo">
 			    <input name = 'timer1' type = 'text' id ="min" class = "timer" value={{timer1}} readonly/>&nbsp;:
 			    <input name = 'timer2' type = 'text' id ="sec" class = "timer" value={{timer2}} readonly/>
@@ -171,19 +181,19 @@
 				  </div>&nbsp;
 				  <div id = 'two'>
 					    <p> 
-						    <input name = 'ch' type = 'radio' value = 'one'>
+						    <input name = 'ch' type = 'radio' value = '1'>
 						    {{choice1}}
 					    </p>
 					    <p>
-						    <input name = 'ch' type = 'radio' value = 'two'>
+						    <input name = 'ch' type = 'radio' value = '2'>
 						    {{choice2}}
 					    </p>
 					    <p> 
-						    <input name = 'ch' type = 'radio' value = 'three'>
+						    <input name = 'ch' type = 'radio' value = '3'>
 						    {{choice3}}
 					    </p>
 					    <p> 
-						    <input name = 'ch' type = 'radio' value = 'four'>          
+						    <input name = 'ch' type = 'radio' value = '4'>          
 						    {{choice4}}
 					    </p>
 					    <p>
@@ -193,8 +203,8 @@
 				    </div>&nbsp;
 			     </div>
               </div>
-			  </form>
-		    </div>
+		</form>
+	</div>
    </body>
   <footer class = 'footer'>
 	<img src="https://developers.google.com/appengine/images/appengine-noborder-120x30.gif" 

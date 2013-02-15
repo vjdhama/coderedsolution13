@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Glegoo' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Podkova' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Advent+Pro' rel='stylesheet' type='text/css'>
+  	<link type="text/css" rel="stylesheet" href="../stylesheets/score.css" />
+	<title>CodeRed Scorecard</title>
+</head>
+<body>
+	<div class = 'header'>
+		<div><a href = '#'>CODERED 2013</a></div>
+	</div>
+	<div class = "score-box">
+		<h3>CodeRed Scorecard</h3>
+		<hr>
+		<div class = 'score'>
+			<table>
+				<tr>
+				    <td class="label">
+	                   Attempted
+	                </td>
+	                <td>
+	                   {{attempted}}
+	                </td>
+	             </tr>  
+	             <tr>
+				    <td class="label">
+	                   Correct
+	                </td>
+	                <td>
+	                   {{correct}}
+	                </td>
+	             </tr>   
+	             <tr>
+				    <td class="label">
+	                   Wrong
+	                </td>
+	                <td>
+	                   {{wrong}}
+	                </td>
+	             </tr>
+	             <tr>
+				    <td class="label">
+	                   Score
+	                </td>
+	                <td>
+	                   {{score}}
+	                </td>
+	             </tr>
+	        </table>
+	    </div>   
+	    <form method = 'post' >
+	 		<input type = 'submit' class = 'submit' value = "Logout">
+		</form>
+		
+	</div>
+</body>
+<footer class = 'footer'>
+	<img src="https://developers.google.com/appengine/images/appengine-noborder-120x30.gif" 
+	alt="Powered by Google App Engine" />
+</footer>
+</html>

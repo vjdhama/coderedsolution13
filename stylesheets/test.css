@@ -33,7 +33,35 @@ body{
 	color : rgb(88,88,88);
 	font-size: 24px;
 }
-.login-box{
+#score{
+	display: none;
+	width: 90%;
+	height: 75%;
+	font-family: inherit;
+	vertical-align: center;
+	margin-left: 5%;
+	border-color: white;
+	border-style:ridge;
+	border-bottom-right-radius: 20px;
+	border-top-left-radius: 20px;
+	margin-top: 2%;
+	margin-bottom: 7%;
+	box-shadow: 0px 0px 10px;
+}
+.vscore{
+	margin-left: 36%;
+	margin-top: 15%;
+	margin-bottom: 20%;
+	font-family: 'Glegoo', serif;
+	font-size: 30px;
+	text-align: centre;
+	background: rgb(88,88,99);
+    color: rgb(255,137,39);
+    border-radius: 8px;
+    width: 300px;
+    height: 60px;
+}
+#login-box{
 	width: 90%;
 	font-family: inherit;
 	vertical-align: center;
@@ -46,7 +74,7 @@ body{
 	margin-bottom: 7%;
 	box-shadow: 0px 0px 10px;
 }
-.login-box h3{
+#login-box h3{
 	font-family: 'Advent Pro', sans-serif;
 	font-size: 20px;
 	margin : 10px;
@@ -60,7 +88,7 @@ body{
 	-o-transition: all 0.2s linear;
 	transition: all 0.2s linear;
 }
-.login-box hr{
+#login-box hr{
 	margin: 10px;
 	margin-top: 5px;
 }
