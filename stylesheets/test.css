@@ -118,8 +118,8 @@ pre{
 }
 
 #demo{
-    margin-left: 84%;
-
+    margin-left: 89%;
+    margin-top:  -3%;  
 }
 
 .timer{
@@ -177,6 +177,9 @@ pre{
    color: red;
 }
 
+#completed{
+	margin-left: 800px;
+}
 
 .footer {
     background-color: white;

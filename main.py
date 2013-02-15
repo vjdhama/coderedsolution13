@@ -29,21 +29,7 @@ SECRET = 'rkuhoi$kjb&JKn%,kn&*@#'
 questionNo = 1
 questionSet = {}
 solution = dict(solved = [], correct = 0, wrong = 0, totalAttempted = 0, score = 0)
-classMap = dict(timer1= '01',timer2 = '04', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
-
-def reset():
-      global questionNo, classMap
-      questionNo = 1
-      for x in range(1, 31):
-          classMap['class' + str(x)] = 'q'
-          solution[x] = None
-      solution['correct'] = 0
-      solution['wrong'] = 0
-      solution['totalAttempted'] = 0
-      solution['score'] = 0   
-      classMap['timer1'] = '01'
-      classMap['timer2'] = '04'
-      classMap['class1'] = 'current'   
+classMap = dict(timer1= '00',timer2 = '31', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
 
  
 def check_secure_val(h):
@@ -77,7 +63,7 @@ class Handler(webapp2.RequestHandler):
           return cookie_val and check_secure_val(cookie_val)
           
       def login(self, team):
-          self.set_secure_cookie('team_id', str(team.key().id()))
+          self.set_secure_cookie('team_id', str(team.teamname))
       
       def logout(self):
           self.response.headers.add_header('Set-Cookie','team_id=; Path=/')
@@ -85,7 +71,7 @@ class Handler(webapp2.RequestHandler):
       def initialize(self, *a, **kw):
           webapp2.RequestHandler.initialize(self, *a, **kw)
           teamid = self.read_secure_cookie('team_id')
-          self.team = teamid and Register.by_id(int(teamid))  
+          self.team = teamid and Register.by_name(teamid)  
          
       def getQuestion(self, cacheFlag = False):
           global questionNo, questionSet, solution, classMap
@@ -109,7 +95,24 @@ class Handler(webapp2.RequestHandler):
           classMap['choice2'] =  questionSet[int(questionNo)][2]
           classMap['choice3'] =  questionSet[int(questionNo)][3]
           classMap['choice4'] =  questionSet[int(questionNo)][4]      
-                 
+      
+      def reset(self):
+          global questionNo, classMap, solution
+          questionNo = 1
+          for x in range(1, 31):
+              classMap['class' + str(x)] = 'q'
+              solution[x] = None
+          solution['correct'] = 0
+          solution['wrong'] = 0
+          solution['totalAttempted'] = 0
+          solution['score'] = 0   
+          classMap['timer1'] = '00'
+          classMap['timer2'] = '31'
+          classMap['class1'] = 'current' 
+          classMap['qno'] = 1
+          del solution['solved']
+          solution['solved'] = []
+
 class MainHandler(Handler):
     def get(self):
           self.render('base.html')
@@ -121,7 +124,7 @@ class MainHandler(Handler):
           
           if u:
               self.login(u)
-              reset()
+              self.reset()
               self.redirect('/instructions')
           else:
               msg = 'Invalid login'
@@ -174,8 +177,12 @@ class Question(db.Model):
     choice_4 = db.TextProperty(required = True)
     answer = db.TextProperty(required = True)
     
-    
-    
+class Scorecard(db.Model):
+    teamname = db.TextProperty(required = True)    
+    attempted = db.TextProperty(required = True)
+    correct = db.TextProperty(required = True)
+    score = db.TextProperty(required = True)
+
 class QuesHandler(Handler):
     def get(self):
         self.render('ques.html')
@@ -220,7 +227,6 @@ class Codered(Handler):
       def get(self):
           check = self.read_secure_cookie('team_id')
           if check:
-              global questionNo
               self.getQuestion()          
               self.render('start.html', **classMap)
           else:
@@ -279,12 +285,19 @@ class Codered(Handler):
 
 class Score(MainHandler):
       def get(self):
-          score = {}
-          score['correct'] = solution['correct']
-          score['wrong'] = solution['wrong']
-          score['attempted'] = solution['totalAttempted'] 
-          score['score'] = (int(solution['correct']) * 3) - int(solution['wrong'])  
-          self.render('score.html', **score) 
+          check = self.read_secure_cookie('team_id')
+          if check:
+              score = {}
+              score['name'] = check
+              score['correct'] = solution['correct']
+              score['wrong'] = solution['wrong']
+              score['attempted'] = solution['totalAttempted'] 
+              score['score'] = (int(solution['correct']) * 3) - int(solution['wrong']) 
+              scoreRecord = Scorecard(teamname = check, attempted = str(solution['totalAttempted']), correct = str(solution['correct']), score = str(score['score']))
+              scoreRecord.put() 
+              self.render('score.html', **score) 
+          else:
+              self.redirect('/')   
       
       def post(self):
           self.logout()

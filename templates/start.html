@@ -27,12 +27,17 @@
 		        submitActor = $submitActors[0];
 		      }
 
-		      
-		      if (sec == 0 && min == 0)
-		       {
-		         $("#msg").text("Your loop has been closed!").show().fadeOut(1500);
-		          return false;
-		       }
+		     
+		      if (submitActor.name == "completed") {
+		      	var r=confirm("Confirm submission!");
+				if (r==true)
+					  {
+					    $("#login-box").slideUp();
+		                $("#score").delay(500).slideDown("slow");
+		              }
+		        return false;      
+                 
+		      } 
 		      else if( radio_buttons.filter(':checked').length == 0  && submitActor.name == "submit"){
 		         $("#msg").text("No choice selected!").show().fadeOut(1500);
 		           return false;
@@ -60,46 +65,46 @@
 
   	     var myVar=setInterval(function(){myTimer()},1000);
          function myTimer()
-		 {
-		 var min=document.getElementById("min").value;
-		 var sec=document.getElementById("sec").value;
-		 if (sec == 0 && min == 0)
-		 {
-		 	clearInterval(myVar);
-		 	document.getElementById("min").value = 00;
-		    document.getElementById("sec").value = 00;
-		    return ;
-		 }
-		 if (sec == 0)
-		 {
-             min = min - 1;
-             sec = 59;
-		 }
-		 else
-		 {
-		 	 sec = sec - 1;
-		 }
-		 if(min<10)
-		 {
-		 	min = '0' + (min%10)
-		 }
-		 if(sec<10)
-		 {
-		 	sec = '0' + sec%10
-		 }
-		 if (sec == 0 && min == 0)
-		 {
-		 	clearInterval(myVar);
-		 	document.getElementById("min").value = 00;
-		    document.getElementById("sec").value = 00;
-		    $("#login-box").slideUp("slow");
-		    $("#score").slideDown("slow");
-		 }
-		 else
-		 {
-		    document.getElementById("min").value = min;
-		    document.getElementById("sec").value = sec;
-		}
+			 {
+			 var min=document.getElementById("min").value;
+			 var sec=document.getElementById("sec").value;
+			 if (sec == 0 && min == 0)
+			 {
+			 	clearInterval(myVar);
+			 	document.getElementById("min").value = 00;
+			    document.getElementById("sec").value = 00;
+			    return ;
+			 }
+			 if (sec == 0)
+			 {
+	             min = min - 1;
+	             sec = 59;
+			 }
+			 else
+			 {
+			 	 sec = sec - 1;
+			 }
+			 if(min<10)
+			 {
+			 	min = '0' + (min%10)
+			 }
+			 if(sec<10)
+			 {
+			 	sec = '0' + sec%10
+			 }
+			 if (sec == 0 && min == 0)
+			 {
+			 	clearInterval(myVar);
+			 	document.getElementById("min").value = 00;
+			    document.getElementById("sec").value = 00;
+			    $("#login-box").slideUp();
+			    $("#score").delay(500).slideDown("slow");
+			 }
+			 else
+			 {
+			    document.getElementById("min").value = min;
+			    document.getElementById("sec").value = sec;
+			}
 		}
 
   	  </script>
@@ -207,8 +212,11 @@
 						    {{choice4}}
 					    </p>
 					    <p>
-						    <input class = 'submit' type = 'submit' name = 'submit' value = 'submit'  >
+						    <input class = 'submit' type = 'submit' name = 'submit' value = 'submit this question'  >
+						    <input class = 'submit' id = 'completed' type = 'submit' name = 'completed' value = 'submit the test'>
+						    <br/>
 						    <span id='msg'></span>
+						    <br/>
 					    </p>
 				    </div>&nbsp;
 			     </div>

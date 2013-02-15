@@ -5,6 +5,14 @@
 	<link href='http://fonts.googleapis.com/css?family=Podkova' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Advent+Pro' rel='stylesheet' type='text/css'>
   	<link type="text/css" rel="stylesheet" href="../stylesheets/score.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script> 
+         $(document).ready(function(){
+            // jQuery methods go here...
+             
+            var t = setTimeout("document.logout.submit();",8000); 
+         });
+     </script>       
 	<title>CodeRed Scorecard</title>
 </head>
 <body>
@@ -16,6 +24,14 @@
 		<hr>
 		<div class = 'score'>
 			<table>
+				<tr>
+				    <td class="label">
+	                   Team Name
+	                </td>
+	                <td>
+	                   {{name}}
+	                </td>
+	             </tr> 
 				<tr>
 				    <td class="label">
 	                   Attempted
@@ -50,7 +66,7 @@
 	             </tr>
 	        </table>
 	    </div>   
-	    <form method = 'post' >
+	    <form method = 'post' name = 'logout'>
 	 		<input type = 'submit' class = 'submit' value = "Logout">
 		</form>
 		
