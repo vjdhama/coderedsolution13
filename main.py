@@ -96,8 +96,7 @@ class Handler(webapp2.RequestHandler):
                 for ques in query:
                     key = key + 1
                     qdir[key] = [ques.question,ques.choice_1,ques.choice_2,ques.choice_3,ques.choice_4,ques.answer]#qdir = {key : list}
-                    solution[key] = ques.answer
-
+                    
                 a = random.randint(1,key-3)
                 newkey = 0
                 for x in xrange(a,a+4):
@@ -210,7 +209,7 @@ def setScore(choice):
       global questionNo, solution
       if int(questionNo) not in solution['solved']:
           solution['solved'].append(int(questionNo))
-          if int(solution[int(questionNo)]) == int(choice):
+          if int(questionSet[int(questionNo)][5]) == int(choice):
                  solution['correct'] += 1
           else:
                  solution['wrong'] += 1
@@ -222,7 +221,7 @@ class Codered(Handler):
           check = self.read_secure_cookie('team_id')
           if check:
               global questionNo
-              self.getQuestion()                   
+              self.getQuestion()          
               self.render('start.html', **classMap)
           else:
              self.redirect('/') 
@@ -275,7 +274,7 @@ class Codered(Handler):
                                     classMap['class'+str(temp)] ='current'   
                           questionNo = temp           
                           classMap['qno'] = questionNo 
-                  self.getQuestion(True)                                                                
+                  self.getQuestion(True)                                                                      
           self.render('start.html', **classMap)
 
 class Score(MainHandler):
