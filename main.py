@@ -111,8 +111,9 @@ class Handler(webapp2.RequestHandler):
       
       #reset all global values to default
       def reset(self):
-          global questionNo, classMap, solution
+          global questionNo, classMap, solution, quesAlreadySubmitted
           questionNo = 1
+          quesAlreadySubmitted = False
           for x in range(1, 31):
               classMap['class' + str(x)] = 'q'
               solution[x] = None
@@ -294,19 +295,29 @@ class Codered(Handler):
               self.redirect('/score')
           #else continue    
           choice = self.request.get('ch')# choice will contain the choice selected (one OR two OR three OR FOUR--REFER start.html)
-          # get which question button on questiongrid did the user presed
-          qNo = self.request.get('questionNo') 
+          qNo = self.request.get('questionNo') # get which question button on questiongrid did the user pressed
+          prev = self.request.get('previous')
+          next = self.request.get('next')
           #if current question is NOT what user wants to go to 
           if qNo != questionNo:
                   #if user wants to goto new question 
-                  if qNo :
+                  if qNo or prev or next:
                       #if prev question was not already submitted
                       if quesAlreadySubmitted == False:
                           #set prev questions (HTML identifier)class to 'q' 
                           classMap['class'+str(questionNo)] ='q'
                       else:
                           #set prev questions (HTML identifier)class to 'submitted' 
-                          classMap['class'+str(questionNo)] ='submitted'   
+                          classMap['class'+str(questionNo)] ='submitted'  
+                      if prev:
+                          qNo = questionNo - 1
+                          if qNo < 1:
+                              qNo = 30
+                      if next:
+                          qNo = questionNo + 1         
+                          if qNo > 30:
+                              qNo = 1
+
                       if classMap['class'+str(qNo)] == 'submitted' :
                           quesAlreadySubmitted = True  
                       else:
