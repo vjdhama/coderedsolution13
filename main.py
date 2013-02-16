@@ -27,7 +27,7 @@ solution = dict(solved = [], correct = 0, wrong = 0, totalAttempted = 0, score =
 #                        :timer value
 #                        :question no
 #                        :class(tag identifier) for question grid submit buttons in start.html
-classMap = dict(timer1= '00',timer2 = '31', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
+classMap = dict(timer1= '01',timer2 = '31', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
 adminname = ''   
 pword = ''
 
@@ -95,9 +95,9 @@ class Handler(webapp2.RequestHandler):
                     key = key + 1
                     qdir[key] = [ques.question,ques.choice_1,ques.choice_2,ques.choice_3,ques.choice_4,ques.answer]#qdir = {key : list}
                     
-                a = random.randint(1,key-3)# choose random question to statr from
+                a = random.randint(1,key-29)# choose random question to statr from
                 newkey = 0
-                for x in xrange(a,a+4):
+                for x in xrange(a,a+30):
                     newkey = newkey + 1
                     questionSet[newkey] = qdir[x]
           #else use the cache          
@@ -310,11 +310,11 @@ class Codered(Handler):
                           #set prev questions (HTML identifier)class to 'submitted' 
                           classMap['class'+str(questionNo)] ='submitted'  
                       if prev:
-                          qNo = questionNo - 1
+                          qNo = int(questionNo) - 1
                           if qNo < 1:
                               qNo = 30
                       if next:
-                          qNo = questionNo + 1         
+                          qNo = int(questionNo) + 1         
                           if qNo > 30:
                               qNo = 1
 
@@ -330,7 +330,7 @@ class Codered(Handler):
                       classMap['qno'] = questionNo       
                       
                   #if user presses submit button    
-                  if not qNo:
+                  else:
                       submit = self.request.get('submit')
                       #if submit button is clicked and answer is provided   
                       if submit and choice:
