@@ -30,7 +30,8 @@ questionNo = 1
 questionSet = {}
 solution = dict(solved = [], correct = 0, wrong = 0, totalAttempted = 0, score = 0)
 classMap = dict(timer1= '00',timer2 = '31', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
-
+adminname = ''
+pword = ''
  
 def check_secure_val(h):
       val= h.strip().split('|')[0]
@@ -115,7 +116,10 @@ class Handler(webapp2.RequestHandler):
 
 class MainHandler(Handler):
     def get(self):
-          self.render('base.html')
+        if (str(self.request.remote_addr) in ['127.0.0.1','203.199.146.114']): # add the list of allowed ip's
+            self.render('base.html')
+        else:
+            self.error(403) #Access denied. maybe use a HTML PAGE
           
     def post(self):           
           teamname = self.request.get('teamname')
@@ -160,7 +164,11 @@ class RegisterHandler(Handler):
     def make_pass(self):
         return ''.join(random.choice(string.letters) for x in xrange(5))
     def get(self):
-        self.render('reg.html')
+        if adminname and pword:
+            self.render('reg.html')
+        else:
+            self.error(403)
+
     def post(self):
         team = self.request.get('team')
         mail = self.request.get('email')
@@ -185,7 +193,11 @@ class Scorecard(db.Model):
 
 class QuesHandler(Handler):
     def get(self):
-        self.render('ques.html')
+        if adminname and pword:
+            self.render('ques.html')
+        else:
+            self.error(403)
+
     def post(self):
         ques = self.request.get('ques')
         ch1 = self.request.get('ch1')
@@ -196,8 +208,6 @@ class QuesHandler(Handler):
         Q = Question(question = ques,choice_1 =ch1,choice_2 = ch2,choice_3 = ch3,choice_4 = ch4,answer = ans)
         Q.put()
         self.redirect('/admin/question')
-
-
 
 class Instruction(Handler):
       def get(self):
@@ -308,6 +318,21 @@ class Logout(MainHandler):
           self.logout()
           self.redirect('/') 
 
+class AdminHandler(Handler):
+    def get(self):
+        self.render('admin.html')
+    def post(self):
+        global adminname , pword
+        adminname = self.request.get('username')
+        pword = self.request.get('password')
+        if adminname == 'harry' and pword == 'ron':
+            self.redirect('/') 
+        else:
+            adminname = ''
+            pword = ''
+            msg = 'Invalid login'
+            self.render('admin.html', error = msg)
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/admin/register', RegisterHandler),
@@ -316,4 +341,5 @@ app = webapp2.WSGIApplication([
     ('/codered', Codered),
     ('/score', Score),
     ('/logout', Logout),
+    ('/admin', AdminHandler)
 ], debug=True)
