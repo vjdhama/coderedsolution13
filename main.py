@@ -119,7 +119,7 @@ class MainHandler(Handler):
         if (str(self.request.remote_addr) in ['127.0.0.1','203.199.146.114']): # add the list of allowed ip's
             self.render('base.html')
         else:
-            self.error(403) #Access denied. maybe use a HTML PAGE
+            self.render('403.html') #Access denied. maybe use a HTML PAGE
           
     def post(self):           
           teamname = self.request.get('teamname')
@@ -167,7 +167,7 @@ class RegisterHandler(Handler):
         if adminname and pword:
             self.render('reg.html')
         else:
-            self.error(403)
+            self.render('403.html')
 
     def post(self):
         team = self.request.get('team')
@@ -196,7 +196,7 @@ class QuesHandler(Handler):
         if adminname and pword:
             self.render('ques.html')
         else:
-            self.error(403)
+            self.render('403.html')
 
     def post(self):
         ques = self.request.get('ques')
