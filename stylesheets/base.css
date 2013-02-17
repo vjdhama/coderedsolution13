@@ -5,19 +5,29 @@ body{
 	margin: 0 auto;
 }
 .header{
+	font-family: 'Metamorphous';
 	background-color: rgb(250,250,250);
 	font-size: 24px;
 	height: 40px;
-	box-shadow: rgba(0,0,0,0.1) 0px 0px 20px;
+	box-shadow: rgba(0,1px,0,0.1) 0px 0px 20px;
 }
 .header div{
-	width: 200px;
+	width: 100%;
 	font-weight: bold;
 	text-align: center;
-	margin-left: 41%;
 }
 .header div a{
+	font-size: 28px;
+	text-decoration: none;
 	color: rgb(255,127,39);
+	text-shadow: 0px 2px 3px #A34200;
+	letter-spacing: 2px;
+}
+.header div a sup{
+	font-size: 20px;
+	letter-spacing: -1px;
+	color: rgb(88,88,88);
+	text-shadow: 0px 2px 3px #464646;
 }
 .login-box{
 	width: 50%;
