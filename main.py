@@ -121,10 +121,10 @@ class Handler(webapp2.RequestHandler):
           solution['wrong'] = 0
           solution['totalAttempted'] = 0
           solution['score'] = 0   
-          classMap['timer1'] = '00'
+          classMap['timer1'] = '01'
           classMap['timer2'] = '31'
           classMap['class1'] = 'current' 
-          classMap['qno'] = 1
+          classMap['qno'] = questionNo
           del solution['solved']
           solution['solved'] = []
 
