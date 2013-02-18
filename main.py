@@ -27,7 +27,7 @@ solution = dict(solved = [], correct = 0, wrong = 0, totalAttempted = 0, score =
 #                        :timer value
 #                        :question no
 #                        :class(tag identifier) for question grid submit buttons in start.html
-classMap = dict(timer1= '01',timer2 = '31', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
+classMap = dict(timer1= '30',timer2 = '00', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
 adminname = ''   
 pword = ''
 
@@ -121,10 +121,10 @@ class Handler(webapp2.RequestHandler):
           solution['wrong'] = 0
           solution['totalAttempted'] = 0
           solution['score'] = 0   
-          classMap['timer1'] = '00'
-          classMap['timer2'] = '31'
+          classMap['timer1'] = '30'
+          classMap['timer2'] = '00'
           classMap['class1'] = 'current' 
-          classMap['qno'] = 1
+          classMap['qno'] = questionNo
           del solution['solved']
           solution['solved'] = []
 
@@ -223,6 +223,23 @@ class Scorecard(db.Model):
 class QuesHandler(Handler):
     def get(self):
         if adminname and pword:
+            data = open('1.txt', 'rb')
+            k = data.read()
+            tt = k.split('!!!')
+            #pp = tt[0].split('!!')
+            for t in tt:
+                p = t.split('!!')
+                ques = p[0]
+                ch1 = p[1]
+                ch2 = p[2] 
+                ch3 = p[3]
+                ch4 = p[4]
+                ans = p[5]
+                Q = Question(question = ques,choice_1 =ch1,choice_2 = ch2,choice_3 = ch3,choice_4 = ch4,answer = ans)
+                Q.put()   
+
+            data.close()
+            #self.write(pp)
             self.render('ques.html')
         else:
             self.render('403.html')
