@@ -17,19 +17,12 @@ def teams_key(group = 'default'):
 
 SECRET = 'rkuhoi$kjb&JKn%,kn&*@#'
 
-questionNo = 1    #stores the current question no
-questionSet = {}  #cache to store the questions
-
-#dictionary to store the scorecard
-solution = dict(solved = [], correct = 0, wrong = 0, totalAttempted = 0, score = 0)
-
-#dictionary to pass data to the html page
-#                        :timer value
-#                        :question no
-#                        :class(tag identifier) for question grid submit buttons in start.html
-classMap = dict(timer1= '01',timer2 = '31', qno = questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
+users = {}#for  storing user data
+qdir = {}#for storing all questions
+tot_ques = 0 # for total number of questions in database
 adminname = ''   
 pword = ''
+
 
 #check if the submitted hash matches the objects original hash  
 def check_secure_val(h):
@@ -47,6 +40,54 @@ def make_secure_val(s):
           
 # Base Handler for the application
 #All other handler classes are derived from this          
+
+class user_data():
+    def __init__(self):
+        self.questionNo = 1    #stores the current question no
+        self.questionSet = {}  #cache to store the questions
+
+        #dictionary to store the scorecard
+        self.solution = dict(solved = [], correct = 0, wrong = 0, totalAttempted = 0, score = 0)
+
+        #dictionary to pass data to the html page
+        #                        :timer value
+        #                        :question no
+        #                        :class(tag identifier) for question grid submit buttons in start.html
+        self.classMap = dict(timer1= '30',timer2 = '00', qno = self.questionNo, class29= 'q', class28= 'q', class21= 'q', class20= 'q', class23= 'q', class22= 'q', class25= 'q', class24= 'q', class27= 'q', class26= 'q', class8= 'q', class9= 'q', class6= 'q', class7= 'q', class4= 'q', class5= 'q', class2= 'q', class3= 'q', class1= 'current', class30= 'q', class18= 'q', class19= 'q', class14= 'q', class15= 'q', class16= 'q', class17= 'q', class10= 'q', class11= 'q', class12= 'q', class13= 'q')
+        #flag to keep track of whether the current question is already submitted
+        self.quesAlreadySubmitted = False        
+
+  #read question from cache   
+    def getQuestion(self, cache = False):
+        global qdir,tot_ques
+        if cache == False:    
+            a = random.randint(1,tot_ques - 29)# choose random question to start from
+            newkey = 0
+            for x in xrange(a,a+30):
+                  newkey = newkey + 1
+                  self.questionSet[newkey] = qdir[x]
+        else:
+            pass         
+        self.classMap['question'] = self.questionSet[int(self.questionNo)][0]
+        self.classMap['choice1'] =  self.questionSet[int(self.questionNo)][1]
+        self.classMap['choice2'] =  self.questionSet[int(self.questionNo)][2]
+        self.classMap['choice3'] =  self.questionSet[int(self.questionNo)][3]
+        self.classMap['choice4'] =  self.questionSet[int(self.questionNo)][4]
+
+    #function checks if current option submitted is correct
+    #and changes the values of correct , wrong and attempted questions
+    def setScore(self, choice):
+        #if question response is not already submitted
+        if int(self.questionNo) not in self.solution['solved']:
+              #insert submitted question to list of solved question
+              self.solution['solved'].append(int(self.questionNo))
+              #check if solution is correct
+              if int(self.questionSet[int(self.questionNo)][5]) == int(choice):
+                     self.solution['correct'] += 1
+              else:
+                     self.solution['wrong'] += 1
+              self.solution['totalAttempted'] += 1              
+
 class Handler(webapp2.RequestHandler):
       def write(self, *a, **kw):
           self.response.out.write(*a, **kw)
@@ -83,32 +124,8 @@ class Handler(webapp2.RequestHandler):
           teamid = self.read_secure_cookie('team_id')
           self.team = teamid and Register.by_name(teamid)  
       
-      #read question from database   
-      def getQuestion(self, cacheFlag = False):
-          global questionNo, questionSet, solution, classMap
-          #if reading for first time
-          if cacheFlag == False:  
-                query = Question.all()
-                qdir = {}#for storing all questions
-                key = 0#for key in qdir
-                for ques in query:
-                    key = key + 1
-                    qdir[key] = [ques.question,ques.choice_1,ques.choice_2,ques.choice_3,ques.choice_4,ques.answer]#qdir = {key : list}
-                    
-                a = random.randint(1,key-29)# choose random question to statr from
-                newkey = 0
-                for x in xrange(a,a+30):
-                    newkey = newkey + 1
-                    questionSet[newkey] = qdir[x]
-          #else use the cache          
-          else:           
-               pass        
-          classMap['question'] = questionSet[int(questionNo)][0]
-          classMap['choice1'] =  questionSet[int(questionNo)][1]
-          classMap['choice2'] =  questionSet[int(questionNo)][2]
-          classMap['choice3'] =  questionSet[int(questionNo)][3]
-          classMap['choice4'] =  questionSet[int(questionNo)][4]      
-      
+            
+      '''
       #reset all global values to default
       def reset(self):
           global questionNo, classMap, solution, quesAlreadySubmitted
@@ -121,30 +138,36 @@ class Handler(webapp2.RequestHandler):
           solution['wrong'] = 0
           solution['totalAttempted'] = 0
           solution['score'] = 0   
-          classMap['timer1'] = '01'
-          classMap['timer2'] = '31'
+          classMap['timer1'] = '30'
+          classMap['timer2'] = '00'
           classMap['class1'] = 'current' 
           classMap['qno'] = questionNo
           del solution['solved']
           solution['solved'] = []
+          '''
 
 #login handler
 class MainHandler(Handler):
     def get(self):
-        if (str(self.request.remote_addr) in ['127.0.0.1','203.199.146.114']): # add the list of allowed ip's
-            self.render('base.html')
-        else:
-            self.render('403.html') #Access denied. maybe use a HTML PAGE
+
+        #if (str(self.request.remote_addr) in ['127.0.0.1','203.199.146.114','192.168.55.111']): # add the list of allowed ip's
+        
+        self.render('base.html')
+        #else:
+        #    self.render('403.html') #Access denied. maybe use a HTML PAGE
           
     def post(self):           
           teamname = self.request.get('teamname')
           password = self.request.get('password')
           u = Register.login(teamname, password) #read this user's details from database
-          
+          global users
           #if user exists
           if u:
               self.login(u)
-              self.reset()
+              x = user_data()
+              users[str(u.teamname)] = x
+              #self.reset()
+              #self.response.out.write(x.questionNo)
               self.redirect('/instructions')
           #if user doesn't exist    
           else:
@@ -201,7 +224,7 @@ class RegisterHandler(Handler):
         pasw = self.make_pass()
         Regstr = Register(teamname = team,password = pasw,email = mail)
         Regstr.put()#write to database
-        self.redirect('/')
+        self.redirect('/admin/register')
 
 #Question table definition
 class Question(db.Model):
@@ -238,55 +261,68 @@ class QuesHandler(Handler):
         Q.put()
         self.redirect('/admin/question')
 
+#read questions from database
+class ReadQuestion(Handler):
+    def get(self):
+        global qdir, tot_ques
+        if adminname and pword:
+            query = Question.all()
+            key = 0#for key in qdir
+            for ques in query:
+                key = key + 1
+                qdir[key] = [ques.question,ques.choice_1,ques.choice_2,ques.choice_3,ques.choice_4,ques.answer]#qdir = {key : list}
+            tot_ques = key
+            #self.response.out.write(qdir)
+            self.redirect('/')    
+        else:
+            self.render('403.html')
+
 #Instruction page handler
 class Instruction(Handler):
       def get(self):
           check = self.read_secure_cookie('team_id')
           #render if user is logged in
           if check:
+             #global users
+             #self.response.out.write(users)
              self.render('instruction.html')
           else:
              self.redirect('/') 
           
-          
       def post(self):
+          #global users
+          #self.response.out.write(users)
           self.redirect('/codered')    
-
-#flag to keep track of whether the current question is already submitted
-quesAlreadySubmitted = False 
-
-#function checks if current option submitted is correct
-#and changes the values of correct , wrong and attempted questions
-def setScore(choice):
-      global questionNo, solution
-      #if question response is not already submitted
-      if int(questionNo) not in solution['solved']:
-          #insert submitted question to list of solved question
-          solution['solved'].append(int(questionNo))
-          #check if solution is correct
-          if int(questionSet[int(questionNo)][5]) == int(choice):
-                 solution['correct'] += 1
-          else:
-                 solution['wrong'] += 1
-          solution['totalAttempted'] += 1              
-
 
 #handler for questions page
 class Codered(Handler):              
       def get(self):
-          check = self.read_secure_cookie('team_id')
+          '''
+          global qdir, users, tot_ques
+          self.response.out.write(qdir)
+          self.response.out.write(users)
+          self.response.out.write(tot_ques)
+          '''
+          global users
+          team_name = self.read_secure_cookie('team_id')
+          read_user = users[str(team_name)]
+          #self.response.out.write(users)
+          #check = self.read_secure_cookie('team_id')
           #render only if user is logged in
-          if check:
-              self.getQuestion()          
-              self.render('start.html', **classMap)
+      
+          if team_name:
+              read_user.getQuestion()          
+              self.render('start.html', **read_user.classMap)
           else:
              self.redirect('/') 
           
       def post(self):
-          global questionNo, quesAlreadySubmitted , questionSet, classMap, solution 
+          global users
+          team_name = self.read_secure_cookie('team_id')
+          read_user = users[str(team_name)]
           #read timer value
-          classMap['timer1'] = self.request.get('timer1')  
-          classMap['timer2'] = self.request.get('timer2')
+          read_user.classMap['timer1'] = self.request.get('timer1')  
+          read_user.classMap['timer2'] = self.request.get('timer2')
           #read if user wants to finish the test  
           completed = self.request.get('viewscore')
           #if user wants to finish
@@ -299,35 +335,35 @@ class Codered(Handler):
           prev = self.request.get('previous')
           next = self.request.get('next')
           #if current question is NOT what user wants to go to 
-          if qNo != questionNo:
+          if qNo != read_user.questionNo:
                   #if user wants to goto new question 
                   if qNo or prev or next:
                       #if prev question was not already submitted
-                      if quesAlreadySubmitted == False:
+                      if read_user.quesAlreadySubmitted == False:
                           #set prev questions (HTML identifier)class to 'q' 
-                          classMap['class'+str(questionNo)] ='q'
+                          read_user.classMap['class'+str(read_user.questionNo)] ='q'
                       else:
                           #set prev questions (HTML identifier)class to 'submitted' 
-                          classMap['class'+str(questionNo)] ='submitted'  
+                          read_user.classMap['class'+str(read_user.questionNo)] ='submitted'  
                       if prev:
-                          qNo = int(questionNo) - 1
+                          qNo = int(read_user.questionNo) - 1
                           if qNo < 1:
                               qNo = 30
                       if next:
-                          qNo = int(questionNo) + 1         
+                          qNo = int(read_user.questionNo) + 1         
                           if qNo > 30:
                               qNo = 1
 
-                      if classMap['class'+str(qNo)] == 'submitted' :
-                          quesAlreadySubmitted = True  
+                      if read_user.classMap['class'+str(qNo)] == 'submitted' :
+                          read_user.quesAlreadySubmitted = True  
                       else:
-                          quesAlreadySubmitted = False       
+                          read_user.quesAlreadySubmitted = False       
                       
                       #set new questions (HTML identifier)class to 'current'
-                      classMap['class'+str(qNo)] ='current'    
+                      read_user.classMap['class'+str(qNo)] ='current'    
                       #store the current question no
-                      questionNo = qNo 
-                      classMap['qno'] = questionNo       
+                      read_user.questionNo = qNo 
+                      read_user.classMap['qno'] = read_user.questionNo       
                       
                   #if user presses submit button    
                   else:
@@ -335,44 +371,47 @@ class Codered(Handler):
                       #if submit button is clicked and answer is provided   
                       if submit and choice:
                           #call score manipulation function
-                          setScore(choice)
+                          read_user.setScore(choice)
                           #set questions (HTML identifier)class to 'submitted'
-                          classMap['class'+str(questionNo)] ='submitted'
-                          temp = int(questionNo)
+                          read_user.classMap['class'+str(read_user.questionNo)] ='submitted'
+                          temp = int(read_user.questionNo)
                           
                           #find the next question that is not alredy submitted
-                          while classMap['class'+str(temp)] =='submitted':
+                          while read_user.classMap['class'+str(temp)] =='submitted':
                               temp += 1
                               if temp > 30:
                                    temp = 1
-                              if temp == int(questionNo):
+                              if temp == int(read_user.questionNo):
                                    break
                           # 
-                          if temp == int(questionNo):
-                                    quesAlreadySubmitted = True 
-                                    classMap['class'+str(temp)] ='submitted'             
+                          if temp == int(read_user.questionNo):
+                                    read_user.quesAlreadySubmitted = True 
+                                    read_user.classMap['class'+str(temp)] ='submitted'             
                           else:          
-                                    classMap['class'+str(temp)] ='current'   
+                                    read_user.classMap['class'+str(temp)] ='current'   
                           #make that question the current question          
-                          questionNo = temp           
-                          classMap['qno'] = questionNo 
+                          read_user.questionNo = temp           
+                          read_user.classMap['qno'] = read_user.questionNo 
                   #get question from database OR cache        
-                  self.getQuestion(True)                                                                      
-          self.render('start.html', **classMap)
+                  read_user.getQuestion(True)                                                                      
+          self.render('start.html', **read_user.classMap)
 
 #handler for scorecard page
 class Score(MainHandler):
       def get(self):
-          check = self.read_secure_cookie('team_id')
+          #check = self.read_secure_cookie('team_id')
+          global users
+          team_name = self.read_secure_cookie('team_id')
+          read_user = users[str(team_name)]
           #if user is logged in
-          if check:
+          if team_name:
               score = {}
-              score['name'] = check
-              score['correct'] = solution['correct']
-              score['wrong'] = solution['wrong']
-              score['attempted'] = solution['totalAttempted'] 
-              score['score'] = (int(solution['correct']) * 3) - int(solution['wrong']) 
-              scoreRecord = Scorecard(teamname = check, attempted = str(solution['totalAttempted']), correct = str(solution['correct']), score = str(score['score']))
+              score['name'] = team_name
+              score['correct'] = read_user.solution['correct']
+              score['wrong'] = read_user.solution['wrong']
+              score['attempted'] = read_user.solution['totalAttempted'] 
+              score['score'] = (int(read_user.solution['correct']) * 3) - int(read_user.solution['wrong']) 
+              scoreRecord = Scorecard(teamname = team_name, attempted = str(read_user.solution['totalAttempted']), correct = str(read_user.solution['correct']), score = str(score['score']))
               scoreRecord.put()#write score to database 
               self.render('score.html', **score) 
           else:
@@ -385,6 +424,10 @@ class Score(MainHandler):
 #logout handler
 class Logout(MainHandler):
       def get(self):
+          global users
+          team_name = self.read_secure_cookie('team_id')
+          read_user = users[str(team_name)]
+          del users[str(team_name)]
           self.logout()
           self.redirect('/') 
 
@@ -409,6 +452,7 @@ app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/admin/register', RegisterHandler),
     ('/admin/question', QuesHandler),
+    ('/admin/readquestion', ReadQuestion),
     ('/instructions', Instruction),
     ('/codered', Codered),
     ('/score', Score),
