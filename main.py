@@ -246,6 +246,23 @@ class Scorecard(db.Model):
 class QuesHandler(Handler):
     def get(self):
         if adminname and pword:
+            data = open('1.txt', 'rb')
+            k = data.read()
+            tt = k.split('!!!')
+            #pp = tt[0].split('!!')
+            for t in tt:
+                p = t.split('!!')
+                ques = p[0]
+                ch1 = p[1]
+                ch2 = p[2] 
+                ch3 = p[3]
+                ch4 = p[4]
+                ans = p[5]
+                Q = Question(question = ques,choice_1 =ch1,choice_2 = ch2,choice_3 = ch3,choice_4 = ch4,answer = ans)
+                Q.put()   
+
+            data.close()
+            #self.write(pp)
             self.render('ques.html')
         else:
             self.render('403.html')
