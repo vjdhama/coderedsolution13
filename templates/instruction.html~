@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  	<link type="text/css" rel="stylesheet" href="../stylesheets/ques.css" />
+	<title>CodeRed Instructions</title>
+</head>
+<body>
+	<div class = 'header'>
+		<div><a href = '#'><span style = 'color : rgb(88,88,88);'>Code</span>Red</a></div>
+	</div>
+	
+		<h3>CodeRed Instructions</h3>
+		<hr>
+		<form method = 'post' >
+		  <input type = 'submit' value = "Go to test">
+		</form>
+	</div>
+</body>
+<footer class = 'footer'>
+	<img src="https://developers.google.com/appengine/images/appengine-noborder-120x30.gif" 
+	alt="Powered by Google App Engine" />
+</footer>
+</html>

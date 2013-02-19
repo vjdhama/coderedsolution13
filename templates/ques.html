@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Glegoo' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Podkova' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Advent+Pro' rel='stylesheet' type='text/css'>
+  	<link type="text/css" rel="stylesheet" href="../stylesheets/ques.css" />
+  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  	  <script>
+         document.onkeydown = function(event) {
+          if(window.event.keyCode == 116){
+             event.preventDefault();
+          }
+        }
+      </script>
+	<title>CodeRed</title>
+</head>
+<body>
+	<div class = 'header'>
+		<div><a href = '#'>CODERED 2013</a></div>
+	</div>
+	<div class = "login-box">
+		<h3>CodeRed Questions</h3>
+		<hr>
+		<form method = 'post' class = 'login-form'>
+		<div id = 'main'>
+			<div id = 'one'>
+				<p> 
+					<textarea name = 'ques' placeholder = 'Enter Question'></textarea>
+				</p>
+			</div>&nbsp;
+			<vr>
+			<div id = 'two'>
+				<p> 
+					<input name = 'ch1' type = 'text' placeholder = 'Enter Choice 1'>
+				</p>
+				<p> 
+					<input name = 'ch2' type = 'text' placeholder = 'Enter Choice 2'>
+				</p>
+				<p> 
+					<input name = 'ch3' type = 'text' placeholder = 'Enter Choice 3'>
+				</p>
+				<p> 
+					<input name = 'ch4' type = 'text' placeholder = 'Enter Choice 4'>
+				</p>
+				<p> 
+					<input name = 'ans' type = 'text' placeholder = 'Enter Answer'>
+				</p>
+				<p>
+					<input class = 'submit' type = 'submit'>
+				</p>
+			</div>&nbsp;
+		</div>
+		</form>
+	</div>
+</body>
+<footer class = 'footer'>
+	<img src="https://developers.google.com/appengine/images/appengine-noborder-120x30.gif" 
+	alt="Powered by Google App Engine" />
+</footer>
+</html>
