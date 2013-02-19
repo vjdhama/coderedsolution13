@@ -66,6 +66,7 @@ class user_data():
             for x in xrange(a,a+30):
                   newkey = newkey + 1
                   self.questionSet[newkey] = qdir[x]
+            self.response.out.write(qdir)
         else:
             pass         
         self.classMap['question'] = self.questionSet[int(self.questionNo)][0]
