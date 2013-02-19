@@ -25,6 +25,11 @@ body{
 	margin-left: 40%;
 }
 .header div a{
+Team Name	  {{name}}
+Attempted	  {{attempted}}
+Correct	  {{correct}}
+Wrong	  {{wrong}}
+Score	  {{score}}
 	vertical-align: bottom;
 	font-size: 36px;
 	text-decoration: none;
@@ -68,6 +73,7 @@ body{
 	margin-top: 0;
 }
 .score{
+	text-align: center;
 	color: white;
 	margin-left: 30%;
 	margin-top: 6%;

@@ -5,7 +5,7 @@
 #                google appengine      -> for deployment and backend
 
 
-import webapp2, os, string, random, hmac, hashlib 
+import webapp2, os, string, random, hmac, hashlib, operator 
 import jinja2
 from google.appengine.ext import db
 
@@ -17,12 +17,13 @@ def teams_key(group = 'default'):
 
 SECRET = 'rkuhoi$kjb&JKn%,kn&*@#'
 
+top_scores = {}# store top scores
+loggedUsers = []
 users = {}#for  storing user data
 qdir = {}#for storing all questions
 tot_ques = 0 # for total number of questions in database
 adminname = ''   
 pword = ''
-
 
 #check if the submitted hash matches the objects original hash  
 def check_secure_val(h):
@@ -160,9 +161,11 @@ class MainHandler(Handler):
           teamname = self.request.get('teamname')
           password = self.request.get('password')
           u = Register.login(teamname, password) #read this user's details from database
-          global users
+          global users, loggedUsers
           #if user exists
-          if u:
+
+          if u and (u.teamname not in loggedUsers):
+              loggedUsers.append(u.teamname)
               self.login(u)
               x = user_data()
               users[str(u.teamname)] = x
@@ -322,12 +325,12 @@ class Codered(Handler):
           '''
           global users
           team_name = self.read_secure_cookie('team_id')
-          read_user = users[str(team_name)]
           #self.response.out.write(users)
           #check = self.read_secure_cookie('team_id')
           #render only if user is logged in
       
           if team_name:
+              read_user = users[str(team_name)]
               read_user.getQuestion()          
               self.render('start.html', **read_user.classMap)
           else:
@@ -417,11 +420,12 @@ class Codered(Handler):
 class Score(MainHandler):
       def get(self):
           #check = self.read_secure_cookie('team_id')
-          global users
+          global users,top_scores
           team_name = self.read_secure_cookie('team_id')
-          read_user = users[str(team_name)]
+          
           #if user is logged in
           if team_name:
+              read_user = users[str(team_name)]
               score = {}
               score['name'] = team_name
               score['correct'] = read_user.solution['correct']
@@ -430,6 +434,7 @@ class Score(MainHandler):
               score['score'] = (int(read_user.solution['correct']) * 3) - int(read_user.solution['wrong']) 
               scoreRecord = Scorecard(teamname = team_name, attempted = str(read_user.solution['totalAttempted']), correct = str(read_user.solution['correct']), score = str(score['score']))
               scoreRecord.put()#write score to database 
+              top_scores[team_name] = score['score']
               self.render('score.html', **score) 
           else:
               self.redirect('/')   
@@ -443,10 +448,13 @@ class Logout(MainHandler):
       def get(self):
           global users
           team_name = self.read_secure_cookie('team_id')
-          read_user = users[str(team_name)]
-          del users[str(team_name)]
-          self.logout()
-          self.redirect('/') 
+          if team_name:
+              read_user = users[str(team_name)]
+              del users[str(team_name)]
+              self.logout()
+              self.redirect('/') 
+          else:    
+              self.redirect('/')
 
 #handler for admin login
 class AdminHandler(Handler):
@@ -456,13 +464,25 @@ class AdminHandler(Handler):
         global adminname , pword
         adminname = self.request.get('username')
         pword = self.request.get('password')
-        if adminname == 'harry' and pword == 'ron':
+        if adminname == 'harry' and pword == 'ginny':
             self.redirect('/') 
         else:
             adminname = ''
             pword = ''
             msg = 'Invalid login'
             self.render('admin.html', error = msg)
+
+class TopScore(Handler):
+    def sortdic(self,x):
+        sorted_x = sorted(x.iteritems(), key=operator.itemgetter(1))
+        sorted_x.reverse()
+        return sorted_x
+
+    def get(self):
+        global top_scores
+        l = self.sortdic(top_scores)
+        #self.response.out.write(top_scores)
+        self.render('topscore.html',topscore=l)
 
 #declaration of handlers
 app = webapp2.WSGIApplication([
@@ -474,5 +494,6 @@ app = webapp2.WSGIApplication([
     ('/codered', Codered),
     ('/score', Score),
     ('/logout', Logout),
-    ('/admin', AdminHandler)
+    ('/admin', AdminHandler),
+    ('/admin/topscore',TopScore)
 ], debug=True)
