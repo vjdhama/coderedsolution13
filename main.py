@@ -484,6 +484,12 @@ class TopScore(Handler):
         l = self.sortdic(top_scores)
         #self.response.out.write(top_scores)
         self.render('topscore.html',topscore=l)
+     
+class test(Handler):
+        def get(self):
+            global users, loggedUsers           
+            self.response.out.write(users)
+            self.response.out.write(loggedUsers)
 
 #declaration of handlers
 app = webapp2.WSGIApplication([
@@ -496,5 +502,6 @@ app = webapp2.WSGIApplication([
     ('/score', Score),
     ('/logout', Logout),
     ('/admin', AdminHandler),
-    ('/admin/topscore',TopScore)
+    ('/admin/topscore', TopScore),
+    ('/debug', test),
 ], debug=True)
