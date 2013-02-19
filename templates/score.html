@@ -12,7 +12,14 @@
              
             var t = setTimeout("document.logout.submit();",15000); 
          });
-     </script>       
+     </script> 
+  	  <script>
+         document.onkeydown = function(event) {
+          if(window.event.keyCode == 116){
+             event.preventDefault();
+          }
+        }
+      </script>      
 	<title>CodeRed Scorecard</title>
 </head>
 <body>
@@ -29,7 +36,7 @@
 	                   Team Name
 	                </td>
 	                <td>
-	                   &nbsp;{{name}}
+	                   &nbsp;&#09;{{name}}
 	                </td>
 	             </tr> 
 				<tr>
@@ -37,7 +44,7 @@
 	                   Attempted
 	                </td>
 	                <td>
-	                   &nbsp;{{attempted}}
+	                   &nbsp;&#09;{{attempted}}
 	                </td>
 	             </tr>  
 	             <tr>
@@ -45,7 +52,7 @@
 	                   Correct
 	                </td>
 	                <td>
-	                   &nbsp;{{correct}}
+	                   &nbsp;&#09;{{correct}}
 	                </td>
 	             </tr>   
 	             <tr>
@@ -53,7 +60,7 @@
 	                   Wrong
 	                </td>
 	                <td>
-	                   &nbsp;{{wrong}}
+	                   &nbsp;&#09;{{wrong}}
 	                </td>
 	             </tr>
 	             <tr>
@@ -61,7 +68,7 @@
 	                   Score
 	                </td>
 	                <td>
-	                   &nbsp;{{score}}
+	                   &nbsp;&#09;{{score}}
 	                </td>
 	             </tr>
 	        </table>

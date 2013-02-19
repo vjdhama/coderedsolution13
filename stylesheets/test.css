@@ -110,11 +110,17 @@ body{
 	text-align: left;
 }
 #one{
-	height: 160px;
+	height: 250px;
     overflow-y: scroll;
 }
+#two{
+	font-size: 15px;
+	font-family: 'Podkova', sans-serif;
+}
 pre{
-	max-height: 300px;
+	color:white; 
+	max-height: 400px;
+	font-size: 16px;
 }
 
 #demo{

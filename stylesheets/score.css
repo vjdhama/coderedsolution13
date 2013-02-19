@@ -30,6 +30,12 @@ body{
 	text-decoration: none;
 	color: rgb(255,127,39);
 }
+.label{
+	margin-right: 100px;
+	font-size: 20px;
+	text-align: right;
+	font-family: 'Advent Pro' ,sans-serif;
+}
 
 .score-box{
 	width: 70%;
