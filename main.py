@@ -18,7 +18,7 @@ def teams_key(group = 'default'):
 SECRET = 'rkuhoi$kjb&JKn%,kn&*@#'
 
 top_scores = {}# store top scores
-loggedUsers = []
+loggedUsers = [] # list of logged users
 users = {}#for  storing user data
 qdir = {}#for storing all questions
 tot_ques = 0 # for total number of questions in database
@@ -284,7 +284,7 @@ class QuesHandler(Handler):
 #read questions from database
 class ReadQuestion(Handler):
     def get(self):
-        global qdir, tot_ques
+        global qdir, tot_ques, adminname, pword
         if adminname and pword:
             query = Question.all()
             key = 0#for key in qdir
