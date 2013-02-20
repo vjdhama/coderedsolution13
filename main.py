@@ -214,6 +214,7 @@ class RegisterHandler(Handler):
     def make_pass(self):
         return ''.join(random.choice(string.letters) for x in xrange(5))
     def get(self):
+        global adminname, pword
         #if user is admin
         if adminname and pword:
             self.render('reg.html')
