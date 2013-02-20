@@ -39,7 +39,7 @@ def hash_str(s):
 def make_secure_val(s):
       return "%s|%s" % (s,hash_str(s))  
           
-# Base Handler for the application
+#Base Handler for the application
 #All other handler classes are derived from this          
 
 class user_data():

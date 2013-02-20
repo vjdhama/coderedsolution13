@@ -1,6 +1,8 @@
 <html>
 <head>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <link type="text/css" rel="stylesheet" href="../stylesheets/topscore.css" />
+  <link href='http://fonts.googleapis.com/css?family=Nova+Square' rel='stylesheet' type='text/css'>
   	  <script>
          document.onkeydown = function(event) {
           if(window.event.keyCode == 116){
@@ -11,10 +13,10 @@
   <title>topscore</title>    
 </head>
 <body>
-<ul>	
+<div> 
+    <p class = 'heading'><span>TEAMNAME</span>:<span>SCORE</span></p>
 	{%for a in topscore%}
-		<li>{{a[0]}}  {{a[1]}} </li>
+		<p><span>{{a[0]}}</span>:<span>{{a[1]}}</span></p>
 	{%endfor%}
-</ul>
 </body>
 </html>
