@@ -47,11 +47,7 @@ def make_secure_val(s):
       '''
       return "%s|%s" % (s,hash_str(s))  
           
-<<<<<<< HEAD
-=======
-#Base Handler for the application
-#All other handler classes are derived from this          
->>>>>>> 23b1125c47877e87bc389eced7866a087f6cda29
+
 
 class user_data():
     '''
