@@ -2,19 +2,43 @@ body{
 	color: white;
 	background-color: rgb(180,180,180);
 	font-family: 'Nova Square',cursive;
+	text-align: center;
 }
-div{
-	margin-top: 2%;
-	padding-left: 30%;
+
+#table{
+	text-align: left;
+	margin: 10px auto;
+	width: 600px;
 }
-div p{
-	margin-left: 35 %;
+
+#label1{
+	float: left;
+	width: 300px;
+	height: 20px;
+	text-align: center;
 }
-div p span{
-	font-size: 20px;
-	margin-left: 5%;
-	margin-right: 5%;
+
+#label2{
+	float: right;
+	width: 300px;
+	height: 20px;
+	position:relative;
+    top:-20px;
+    left: 300px;
+    text-align: center; 
 }
-.heading{
-	font-weight: bold;
+
+#col1{
+	float: left;
+	width: 300px;
+	text-align: center;
+}
+
+#col2{
+	float: right;
+	width: 300px;
+	position:relative;
+    top:-20px;
+    left: 300px;
+    text-align: center;
 }

@@ -1,22 +1,33 @@
 <html>
-<head>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-  <link type="text/css" rel="stylesheet" href="../stylesheets/topscore.css" />
-  <link href='http://fonts.googleapis.com/css?family=Nova+Square' rel='stylesheet' type='text/css'>
-  	  <script>
-         document.onkeydown = function(event) {
-          if(window.event.keyCode == 116){
-             event.preventDefault();
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="../stylesheets/topscore.css" />
+    <link href='http://fonts.googleapis.com/css?family=Nova+Square' rel='stylesheet' type='text/css'>
+    	  <script>
+           document.onkeydown = function(event) {
+            if(window.event.keyCode == 116){
+               event.preventDefault();
+            }
           }
-        }
-      </script>
-  <title>topscore</title>    
-</head>
-<body>
-<div> 
-    <p class = 'heading'><span>TEAMNAME</span>:<span>SCORE</span></p>
-	{%for a in topscore%}
-		<p><span>{{a[0]}}</span>:<span>{{a[1]}}</span></p>
-	{%endfor%}
-</body>
+        </script>
+    <title>topscore</title>    
+  </head>
+
+  <body>
+     <div id = "table">
+      <div id = "label1"> TEAMNAME <div>
+      <div id = "label2"> SCORE </div>
+  	  <div id = "col1">
+        {%for a in topscore%}
+  		    {{a[0]}}
+  	    {%endfor%}
+      </div> 
+
+      <div id = "col2">
+        {%for a in topscore%}
+          {{a[1]}}
+        {%endfor%}
+      </div>
+     </div>
+  </body>
 </html>
