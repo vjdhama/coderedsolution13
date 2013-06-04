@@ -42,3 +42,17 @@ body{
     left: 300px;
     text-align: center;
 }
+
+#item1{
+	float: left;
+	width: 300px;
+	text-align: center;
+}
+
+#item2{
+	float: right;
+	width: 300px;
+	position:relative;
+    top:-20px;
+    text-align: center;
+}

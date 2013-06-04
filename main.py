@@ -185,8 +185,7 @@ class MainHandler(Handler):
               self.login(u)
               x = user_data()
               usersDi[str(u.teamname)] = x
-              #self.reset()
-              #self.response.out.write(x.questionNo)
+              x.getQuestion()
               self.redirect('/instructions')
           
           #if user doesn't exist    
@@ -200,11 +199,12 @@ class MainHandler(Handler):
               Regstr.put()#write to database
               
               u = Register.login(teamname)
-              loggedUsers.append(u.teamname)
+              loggedUsers.append(teamname)
               
               self.login(u)
               x = user_data()
               usersDi[str(u.teamname)] = x
+              x.getQuestion()
               self.redirect('/instructions')
 
 
@@ -266,6 +266,9 @@ class RegisterHandler(Handler):
             else:
                self.render('403.html') 
 
+        else:
+           self.redirect('/')        
+
     def post(self):
         team = self.request.get('team')
         mail = self.request.get('email')
@@ -325,6 +328,9 @@ class QuesHandler(Handler):
 
             else:
                 self.render('403.html') 
+
+        else:
+           self.redirect('/')        
 
     def post(self):
         ques = self.request.get('ques')
@@ -392,7 +398,7 @@ class Codered(Handler):
       
           if team_name:
               read_user = usersDi[str(team_name)]
-              read_user.getQuestion()          
+              #read_user.getQuestion()          
               self.render('start.html', **read_user.classMap)
           
           else:
@@ -548,7 +554,7 @@ class Logout(MainHandler):
                   self.redirect('/')    
           
           else:    
-              self.render('403.html')
+              self.redirect('/')
 
 class TopScore(Handler):
     def sortdic(self,x):
@@ -572,7 +578,10 @@ class test(Handler):
                    self.response.out.write(loggedUsers)
                 
                 else:
-                   self.render('403.html')   
+                   self.render('403.html')
+
+            else:
+                self.redirect('/')          
 
 #declaration of handlers
 app = webapp2.WSGIApplication([

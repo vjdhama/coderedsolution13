@@ -1,6 +1,6 @@
 <html>
   <head>
-    <script src="jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <link type="text/css" rel="stylesheet" href="../stylesheets/topscore.css" />
     <link href='http://fonts.googleapis.com/css?family=Nova+Square' rel='stylesheet' type='text/css'>
     	  <script>
@@ -19,13 +19,13 @@
       <div id = "label2"> SCORE </div>
   	  <div id = "col1">
         {%for a in topscore%}
-  		    {{a[0]}}
+  		    <div id = "item1">{{a[0]}}</div>
   	    {%endfor%}
       </div> 
 
       <div id = "col2">
         {%for a in topscore%}
-          {{a[1]}}
+          <div id = "item2">{{a[1]}}</div>
         {%endfor%}
       </div>
      </div>
