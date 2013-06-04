@@ -17,17 +17,16 @@
      <div id = "table">
       <div id = "label1"> TEAMNAME <div>
       <div id = "label2"> SCORE </div>
-  	  <div id = "col1">
-        {%for a in topscore%}
-  		    <div id = "item1">{{a[0]}}</div>
-  	    {%endfor%}
-      </div> 
+  	  
+      {%for a in topscore%}
+      <div id = "col1">
+        <div id = "item1">{{a[0]}}</div>
+  	  </div> 
 
       <div id = "col2">
-        {%for a in topscore%}
           <div id = "item2">{{a[1]}}</div>
-        {%endfor%}
       </div>
+      {%endfor%}
      </div>
   </body>
 </html>
