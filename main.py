@@ -10,6 +10,7 @@ import webapp2, os, string, random, hmac, hashlib, operator
 import jinja2
 from google.appengine.ext import db
 from google.appengine.api import users
+import re
 
 jinja_environment = jinja2.Environment(autoescape=True,
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
@@ -47,6 +48,12 @@ def make_secure_val(s):
       '''
       return "%s|%s" % (s,hash_str(s))  
           
+def checkTeamName(teamname):
+      if re.match(r"team[0-9]+", teamname):
+        return False
+      else:
+        return True
+
 
 
 class user_data():
@@ -125,7 +132,7 @@ class Handler(webapp2.RequestHandler):
           self.write(self.render_str(template, **kw))
    
       def set_secure_cookie(self,name,val):
-          '''
+          '''      
           create a cookie:
                      name -> string that is used to refer to value stored in cookie
                      val -> value to stored in cookie
@@ -158,10 +165,25 @@ class MainHandler(Handler):
     '''
     login handler
     '''
+    
+    def setTeam(self, u):
+        loggedUsers.append(u.teamname)
+        self.login(u)
+        x = user_data()
+        usersDi[str(u.teamname)] = x
+        x.getQuestion()
 
     def get(self):
 
         #if (str(self.request.remote_addr) in ['127.0.0.1','203.199.146.114','192.168.55.111']): # add the list of allowed ip's
+        check = self.read_secure_cookie('team_id')
+          
+        if check and usersDi:
+            self.redirect('/codered')
+
+        else:
+            self.logout()    
+
         curUser = users.get_current_user()
 
         if curUser:
@@ -172,20 +194,29 @@ class MainHandler(Handler):
 
               
     def post(self):
+          check = self.read_secure_cookie('team_id')
+          
+          if check and usersDi:
+            self.redirect('/codered')
+
+          else:
+            self.logout()  
+
           curUser = users.get_current_user()
           teamname = self.request.get('teamname')
-          
+
+          if checkTeamName(teamname):
+              msg = 'Invalid team name'
+              self.render('base.html', error = msg)
+              return  
+
           u = Register.login(teamname) #read this user's details from database
           
           global usersDi, loggedUsers
           
           #if user exists
           if u and (u.teamname not in loggedUsers):
-              loggedUsers.append(u.teamname)
-              self.login(u)
-              x = user_data()
-              usersDi[str(u.teamname)] = x
-              x.getQuestion()
+              self.setTeam(u)
               self.redirect('/instructions')
           
           #if user doesn't exist    
@@ -199,12 +230,7 @@ class MainHandler(Handler):
               Regstr.put()#write to database
               
               u = Register.login(teamname)
-              loggedUsers.append(teamname)
-              
-              self.login(u)
-              x = user_data()
-              usersDi[str(u.teamname)] = x
-              x.getQuestion()
+              self.setTeam(u)
               self.redirect('/instructions')
 
 
@@ -376,10 +402,11 @@ class Instruction(Handler):
           check = self.read_secure_cookie('team_id')
           
           #render if user is logged in
-          if check:
+          if check and usersDi:
              self.render('instruction.html')
           
           else:
+             self.logout()
              self.redirect('/') 
           
       def post(self):
@@ -396,12 +423,13 @@ class Codered(Handler):
           
           #render only if user is logged in
       
-          if team_name:
+          if team_name and usersDi:
               read_user = usersDi[str(team_name)]
               #read_user.getQuestion()          
               self.render('start.html', **read_user.classMap)
           
           else:
+             self.logout()
              self.redirect('/') 
           
       def post(self):
