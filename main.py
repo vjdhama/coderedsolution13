@@ -10,7 +10,7 @@ import webapp2, os, string, random, hmac, hashlib, operator
 import jinja2
 from google.appengine.ext import db
 from google.appengine.api import users
-import re
+from helper import *
 
 jinja_environment = jinja2.Environment(autoescape=True,
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
@@ -18,43 +18,11 @@ jinja_environment = jinja2.Environment(autoescape=True,
 def teams_key(group = 'default'):
       return db.Key.from_path('teams', group)
 
-SECRET = 'rkuhoi$kjb&JKn%,kn&*@#'
-
 top_scores = {}# store top scores
 loggedUsers = [] # list of logged users
 usersDi = {}#for  storing user data
 qdir = {}#for storing all questions
 tot_ques = 0 # for total number of questions in database
-
-
-def check_secure_val(h):
-      '''
-      check if the submitted hash matches the objects original hash 
-      '''
-      val= h.strip().split('|')[0]
-      if h == make_secure_val(val):
-            return val 
-
-def hash_str(s):
-      '''
-      create hash of the string passed  
-      '''
-      return hmac.new(SECRET,s).hexdigest()
-
-
-def make_secure_val(s):
-      '''
-      append string and its hash
-      '''
-      return "%s|%s" % (s,hash_str(s))  
-          
-def checkTeamName(teamname):
-      if re.match(r"team[0-9]+", teamname):
-        return False
-      else:
-        return True
-
-
 
 class user_data():
     '''
@@ -148,8 +116,8 @@ class Handler(webapp2.RequestHandler):
           return cookie_val and check_secure_val(cookie_val)
       
 
-      def login(self, team):
-          self.set_secure_cookie('team_id', str(team.teamname))
+      def login(self, teamname):
+          self.set_secure_cookie('team_id', str(teamname))
       
       def logout(self):
           self.response.headers.add_header('Set-Cookie','team_id=; Path=/')
@@ -160,18 +128,45 @@ class Handler(webapp2.RequestHandler):
           teamid = self.read_secure_cookie('team_id')
           self.team = teamid and Register.by_name(teamid)  
       
+      def readQuestion(self):
+          global qdir, tot_ques
+          
+          query = Question.all()
+          key = 0#for key in qdir
+                
+          for ques in query:
+            key = key + 1
+            qdir[key] = [ques.question,ques.choice_1,ques.choice_2,ques.choice_3,ques.choice_4,ques.answer]#qdir = {key : list}
+          tot_ques = key
+
 
 class MainHandler(Handler):
     '''
     login handler
     '''
     
-    def setTeam(self, u):
-        loggedUsers.append(u.teamname)
-        self.login(u)
+    def setTeam(self, u, inDB = True):
+        if inDB:
+          name = u.teamname
+        else:
+          name = u   
+        
+        if self.isEmptyQuesCache():
+           self.readQuestion()
+
+        loggedUsers.append(name)
+        self.login(name)
         x = user_data()
-        usersDi[str(u.teamname)] = x
+        usersDi[str(name)] = x
         x.getQuestion()
+    
+    def isEmptyQuesCache(self):
+        global qdir
+        if qdir:
+          return False
+        else:
+          return True  
+
 
     def get(self):
 
@@ -229,8 +224,7 @@ class MainHandler(Handler):
               Regstr = Register(teamname = teamname,email = curUser.email())
               Regstr.put()#write to database
               
-              u = Register.login(teamname)
-              self.setTeam(u)
+              self.setTeam(teamname, False)
               self.redirect('/instructions')
 
 
@@ -369,7 +363,6 @@ class QuesHandler(Handler):
         Q.put()
         self.redirect('/admin/question')
 
-
 class ReadQuestion(Handler):
     '''
     read questions from database
@@ -380,14 +373,8 @@ class ReadQuestion(Handler):
         
         if user:
             if users.is_current_user_admin():
-                query = Question.all()
-                key = 0#for key in qdir
-                
-                for ques in query:
-                    key = key + 1
-                    qdir[key] = [ques.question,ques.choice_1,ques.choice_2,ques.choice_3,ques.choice_4,ques.answer]#qdir = {key : list}
-                tot_ques = key
-            
+                self.readQuestion()
+                            
             else:
                 self.render('403.html')     
         
